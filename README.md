@@ -1,12 +1,33 @@
-# React + Vite
+Directory structure:
+└── rct24-check-list-plans/
+    ├── README.md
+    ├── eslint.config.js
+    ├── index.html
+    ├── package.json
+    ├── vite.config.js
+    └── src/
+        ├── App.css
+        ├── App.jsx
+        ├── index.css
+        ├── main.jsx
+        └── components/
+            └── CheckList.jsx
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Check List Plans App
+This is a simple React application that allows you to manage a checklist for different plans. You can select a plan from a dropdown, add new sections to the checklist, and add items within each section.
 
-Currently, two official plugins are available:
+Features ✨
+Plan Selection: A dropdown menu lets you choose between predefined plans.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Dynamic Sections: Add new sections to your checklist on the fly.
 
-## Expanding the ESLint configuration
+Interactive Checklist: Each section has a checklist where you can add new items and toggle them as completed.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Technologies 🛠️
+This project is built with:
+
+React: A JavaScript library for building user interfaces.
+
+Vite: A fast build tool for modern web projects.
+
+ESLint: Used for linting to maintain code quality.
