@@ -56,7 +56,7 @@ export default function ListItem({
         )}
       </div>
       <button
-        className="btn btn-sm btn-outline-danger ms-3"
+        className="btn btn-sm p-0 px-1 btn-outline-danger ms-4"
         onClick={(e) => {
           e.stopPropagation();
           handleDeleteItem(sectionName, index);

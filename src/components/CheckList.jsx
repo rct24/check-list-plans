@@ -55,11 +55,11 @@ export default function CheckList({
         )}
         <div className="btn-group btn-group-sm">
           <button
-            className="btn btn-secondary"
+            className="btn  btn-secondary"
             hidden={!isHover}
             onClick={handleToggleEdit}
           >
-            {isEditSectionItemsActive ? "Close" : "Edit"}
+            {isEditSectionItemsActive ? "✖" : "➕"}
           </button>
           {!isDeleteSectionConfirmed ? (
             <button

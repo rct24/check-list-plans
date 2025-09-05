@@ -21,7 +21,7 @@ export const cofrajPana = {
       checked: false,
     },
     {
-      text: "Text cu leader gol fi30",
+      text: "Text cu leader gol φ30",
       checked: false,
     },
     {
