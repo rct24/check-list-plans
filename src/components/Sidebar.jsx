@@ -18,13 +18,8 @@ export default function Sidebar({
 }) {
   return (
     <div
-      className="position-fixed end-0 top-0 h-100 overflow-auto "
-      style={{
-        width: "20vw",
-        maxWidth: "400px",
-        minWidth: "250px",
-        zIndex: 1040,
-      }}
+      className="col-2 position-fixed end-0 overflow-auto card shadow-sm p-3"
+      style={{ maxHeight: "100vh", top: "0" }}
     >
       <div className="form-floating">
         <select

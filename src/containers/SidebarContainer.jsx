@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { cofrajPana, armarePana } from "../constants/constants";
-import CheckListContainer from "./CheckListContainer";
 import Sidebar from "../components/Sidebar";
 
 export default function SidebarContainer() {
