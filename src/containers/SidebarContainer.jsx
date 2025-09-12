@@ -2,27 +2,14 @@ import { useState } from "react";
 import { cofrajPana, armarePana } from "../constants/constants";
 import Sidebar from "../components/Sidebar";
 
-export default function SidebarContainer() {
-  const [planList, setPlanList] = useState([
-    "R423_Plan cofraj soclu SP12",
-    "R424_Plan armare soclu SP12",
-    "R425_Plan cofraj soclu SP13",
-    "R426_Plan armare soclu SP13",
-    "R427_Plan cofraj soclu SP14",
-    "R428_Plan armare soclu SP14",
-    "R429_Plan cofraj soclu SP15",
-    "R430_Plan armare soclu SP15",
-    "R435_Plan cofraj soclu SP18",
-    "R436_Plan armare soclu SP18",
-    "R438_Plan cofraj soclu SP19",
-    "R439_Plan armare soclu SP19",
-    "R441_Plan cofraj soclu SP21",
-    "R442_Plan armare soclu SP21",
-    "R444_Plan cofraj soclu SP22",
-    "R445_Plan armare soclu SP22",
-    "R446_Plan cofraj soclu SP23",
-  ]);
-
+export default function SidebarContainer({
+  planList,
+  selectedPlan,
+  setSelectedPlan,
+  clearCanvas,
+  isDraw,
+  setIsDraw,
+}) {
   const [plansData, setPlansData] = useState(() => {
     const defaultSections = [
       "Elevatie",
@@ -39,6 +26,8 @@ export default function SidebarContainer() {
         data[plan] = JSON.parse(JSON.stringify(cofrajPana));
       } else if (plan.toLowerCase().includes("armare")) {
         data[plan] = JSON.parse(JSON.stringify(armarePana));
+      } else if (plan.toLowerCase().includes("cofraj stalp")) {
+        data[plan] = JSON.parse(JSON.stringify(cofrajStalp));
       } else {
         data[plan] = {};
         defaultSections.forEach((section) => {
@@ -49,7 +38,6 @@ export default function SidebarContainer() {
     return data;
   });
 
-  const [selectedPlan, setSelectedPlan] = useState(planList[0]);
   const [sectionInput, setSectionInput] = useState("");
 
   function handleAddSection() {
@@ -185,6 +173,9 @@ export default function SidebarContainer() {
       handleEditItem={handleEditItem}
       handleEditSection={handleEditSection}
       handleDeleteSection={handleDeleteSection}
+      clearCanvas={clearCanvas}
+      isDraw={isDraw}
+      setIsDraw={setIsDraw}
     />
   );
 }
