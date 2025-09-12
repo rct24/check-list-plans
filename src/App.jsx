@@ -10,7 +10,7 @@ function App() {
     "R601_Plan cofraj grinda GA1",
     "R602_Plan armare grinda GA1",
   ]);
-  const [selectedPlan, setSelectedPlan] = useState(planList[0]);
+  const [selectedPlan, setSelectedPlan] = useState(planList[1]);
   const [isDraw, setIsDraw] = useState(false);
   const canvasRef = useRef(null);
 
