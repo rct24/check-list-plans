@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 
 function App() {
   const [planList, setPlanList] = useState([
+    "R201_Plan fundatii",
     "R501_Plan cofraj stalp S1",
     "R502_Plan armare stalp S1",
     "R601_Plan cofraj grinda GA1",

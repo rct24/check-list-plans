@@ -6,7 +6,7 @@ function drawGreenCheckMark(ctx, x, y, radius) {
   ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
   ctx.fillStyle = "#28a745";
   ctx.fill();
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 1;
   ctx.strokeStyle = "#28a745";
   ctx.stroke();
 
@@ -51,6 +51,7 @@ export default function PdfViewer({ selectedPlan, isDraw = false }) {
     if (canvas) {
       const ctx = canvas.getContext("2d");
       const rect = canvas.getBoundingClientRect();
+
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       drawGreenCheckMark(ctx, x, y, 10);
