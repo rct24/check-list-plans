@@ -20,9 +20,9 @@ function drawGreenCheckMark(ctx, x, y, radius) {
   ctx.restore();
 }
 
-export default function PdfViewer({ selectedPlan, isDraw = false }) {
+export default function PdfViewer({ selectedPlan, isDraw, canvasRef }) {
   const fileName = `${selectedPlan}.pdf`;
-  const canvasRef = useRef(null);
+
   const containerRef = useRef(null);
 
   useEffect(() => {

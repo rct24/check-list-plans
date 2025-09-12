@@ -173,7 +173,9 @@ export default function SidebarContainer({
       handleEditItem={handleEditItem}
       handleEditSection={handleEditSection}
       handleDeleteSection={handleDeleteSection}
-      clearCanvas={clearCanvas}
+      clearCanvas={() => {
+        clearCanvas();
+      }}
       isDraw={isDraw}
       setIsDraw={setIsDraw}
     />

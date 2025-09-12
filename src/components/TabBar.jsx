@@ -85,7 +85,10 @@ export default function TabBar({
           <button
             className="btn btn-secondary"
             type="button"
-            onClick={clearCanvas}
+            onClick={() => {
+              setIsDraw(false);
+              clearCanvas();
+            }}
           >
             Clear
           </button>

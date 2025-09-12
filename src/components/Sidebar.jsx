@@ -28,7 +28,9 @@ export default function Sidebar({
         sectionInput={sectionInput}
         setSectionInput={setSectionInput}
         handleAddSection={handleAddSection}
-        clearCanvas={clearCanvas}
+        clearCanvas={() => {
+          clearCanvas();
+        }}
         isDraw={isDraw}
         setIsDraw={setIsDraw}
       />
