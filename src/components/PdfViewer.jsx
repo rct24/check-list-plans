@@ -66,7 +66,7 @@ export default function PdfViewer({ selectedPlan, isDraw, canvasRef }) {
     >
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
         <iframe
-          src={"/check-list-plans/" + fileName}
+          src={`${import.meta.env.BASE_URL}${fileName}`}
           title="PDF Viewer"
           className="w-100 h-100 border-0"
           style={{
