@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 function drawGreenCheckMark(ctx, x, y, radius) {
   ctx.save();
@@ -20,7 +21,8 @@ function drawGreenCheckMark(ctx, x, y, radius) {
   ctx.restore();
 }
 
-export default function PdfViewer({ selectedPlan, isDraw, canvasRef }) {
+export default function PdfViewer() {
+  const { selectedPlan, isDraw, canvasRef } = useContext(AppContext);
   const fileName = `${selectedPlan}.pdf`;
 
   const containerRef = useRef(null);

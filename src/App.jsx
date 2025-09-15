@@ -1,41 +1,16 @@
 import PdfViewer from "./components/PdfViewer";
 import SidebarContainer from "./containers/SidebarContainer";
 import { useState, useRef } from "react";
+import { AppContextProvider } from "./context/AppContextProvider";
 
 function App() {
-  const [planList, setPlanList] = useState([
-    "R501_Plan cofraj stalp S1_editat",
-  ]);
-  const [selectedPlan, setSelectedPlan] = useState(planList[0]);
-  const [isDraw, setIsDraw] = useState(false);
-  const canvasRef = useRef(null);
-
-  function clearCanvas() {
-    const canvas = canvasRef.current;
-    if (!canvas) {
-      return;
-    }
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
   return (
-    <div className="container-fluid">
-      <PdfViewer
-        selectedPlan={selectedPlan}
-        isDraw={isDraw}
-        canvasRef={canvasRef}
-      />
-      <SidebarContainer
-        planList={planList}
-        selectedPlan={selectedPlan}
-        setSelectedPlan={setSelectedPlan}
-        isDraw={isDraw}
-        setIsDraw={setIsDraw}
-        clearCanvas={clearCanvas}
-        canvasRef={canvasRef}
-      />
-    </div>
+    <AppContextProvider>
+      <div className="container-fluid">
+        <PdfViewer />
+        <SidebarContainer />
+      </div>
+    </AppContextProvider>
   );
 }
 

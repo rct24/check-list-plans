@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { cofrajPana, armarePana } from "../constants/constants";
 import Sidebar from "../components/Sidebar";
+import { AppContext, useAppContext } from "../context/AppContext";
 
-export default function SidebarContainer({
-  planList,
-  selectedPlan,
-  setSelectedPlan,
-  clearCanvas,
-  isDraw,
-  setIsDraw,
-}) {
+export default function SidebarContainer() {
+  const {
+    planList,
+    selectedPlan,
+    setSelectedPlan,
+    clearCanvas,
+    isDraw,
+    setIsDraw,
+  } = useAppContext(AppContext);
+
   const [plansData, setPlansData] = useState(() => {
     const defaultSections = [
       "Elevatie",
