@@ -126,7 +126,6 @@ export function SideBarContextProvider({ children }) {
   function handleEditItem(sectionName, index, newTextValue) {
     setPlansData((prev) => {
       const sectionToDoList = prev[selectedPlan][sectionName] || [];
-      console.log({ plansData });
 
       const newList = sectionToDoList.map((item, i) =>
         i === index ? { ...item, text: newTextValue } : item

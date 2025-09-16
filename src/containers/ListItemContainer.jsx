@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ListItem from "../components/ListItem";
+import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
 
 export default function ListItemContainer({
   itemObj,
@@ -7,12 +8,11 @@ export default function ListItemContainer({
   sectionName,
   handleToggleItem,
   handleDeleteItem,
-  handleEditItem,
 }) {
   const [isRowHover, setIsRowHover] = useState(false);
   const [isItemEdit, setIsItemEdit] = useState(false);
   const [textValue, setTextValue] = useState(itemObj.text);
-
+  const { handleEditItem } = useSideBarContext(SideBarContext);
   useEffect(() => {
     setTextValue(itemObj.text);
   }, [itemObj.text]);
