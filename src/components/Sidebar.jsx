@@ -1,12 +1,9 @@
+import { AppContext, useAppContext } from "../context/AppContext";
+import TabBar from "../components/TabBar";
 import CheckListContainer from "../containers/CheckListContainer";
-import TabBar from "./TabBar";
 export default function Sidebar({
-  planList,
   plansData,
-  selectedPlan,
-  setSelectedPlan,
   sectionInput,
-  setSectionInput,
   handleAddSection,
   sections,
   handleAddItem,
@@ -15,10 +12,11 @@ export default function Sidebar({
   handleEditItem,
   handleEditSection,
   handleDeleteSection,
-  clearCanvas,
-  isDraw,
-  setIsDraw,
+  handleSectionInput,
 }) {
+  const { planList, selectedPlan, handleSelectedPlan } =
+    useAppContext(AppContext);
+
   return (
     <div
       className="col-2 position-fixed end-0 overflow-auto card shadow-sm p-3"
@@ -26,13 +24,8 @@ export default function Sidebar({
     >
       <TabBar
         sectionInput={sectionInput}
-        setSectionInput={setSectionInput}
         handleAddSection={handleAddSection}
-        clearCanvas={() => {
-          clearCanvas();
-        }}
-        isDraw={isDraw}
-        setIsDraw={setIsDraw}
+        handleSectionInput={handleSectionInput}
       />
       <div className="form-floating">
         <select
@@ -40,7 +33,7 @@ export default function Sidebar({
           id="plan-selection"
           name="plans"
           value={selectedPlan}
-          onChange={(e) => setSelectedPlan(e.target.value)}
+          onChange={(e) => handleSelectedPlan(e.target.value)}
         >
           {planList.map((plan) => (
             <option key={plan} value={plan}>

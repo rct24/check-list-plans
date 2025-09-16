@@ -1,13 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AppContext, useAppContext } from "../context/AppContext";
 
 export default function TabBar({
   sectionInput,
-  setSectionInput,
+  handleSectionInput,
   handleAddSection,
-  clearCanvas,
-  isDraw,
-  setIsDraw,
 }) {
+  const { isDraw, handleSetIsDraw, clearCanvas } = useAppContext(AppContext);
   const [activeTab, setActiveTab] = useState("draw");
 
   return (
@@ -44,7 +43,7 @@ export default function TabBar({
               name="addSection"
               placeholder="Add new section"
               value={sectionInput}
-              onChange={(e) => setSectionInput(e.target.value)}
+              onChange={(e) => handleSectionInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleAddSection();
@@ -69,7 +68,7 @@ export default function TabBar({
             <button
               className="btn btn-danger me-2"
               type="button"
-              onClick={() => setIsDraw(false)}
+              onClick={() => handleSetIsDraw(false)}
             >
               Stop
             </button>
@@ -77,7 +76,7 @@ export default function TabBar({
             <button
               className="btn btn-success me-2"
               type="button"
-              onClick={() => setIsDraw(true)}
+              onClick={() => handleSetIsDraw(true)}
             >
               Start
             </button>
@@ -86,7 +85,7 @@ export default function TabBar({
             className="btn btn-secondary"
             type="button"
             onClick={() => {
-              setIsDraw(false);
+              handleSetIsDraw(false);
               clearCanvas();
             }}
           >

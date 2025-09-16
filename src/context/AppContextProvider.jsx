@@ -9,6 +9,17 @@ export function AppContextProvider({ children }) {
   const [isDraw, setIsDraw] = useState(false);
   const canvasRef = useRef(null);
 
+  function handleSelectedPlan(plan) {
+    setSelectedPlan(plan);
+  }
+
+  function handleSetIsDraw(value) {
+    setIsDraw(value);
+  }
+  function handleSetPlanList(plan) {
+    setPlanList(plan);
+  }
+
   function clearCanvas() {
     const canvas = canvasRef.current;
     if (!canvas) {
@@ -19,12 +30,12 @@ export function AppContextProvider({ children }) {
   }
 
   const value = {
-    planList,
-    setPlanList,
-    selectedPlan,
-    setSelectedPlan,
     isDraw,
-    setIsDraw,
+    planList,
+    handleSetPlanList,
+    selectedPlan,
+    handleSelectedPlan,
+    handleSetIsDraw,
     canvasRef,
     clearCanvas,
   };

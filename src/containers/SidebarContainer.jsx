@@ -4,14 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { AppContext, useAppContext } from "../context/AppContext";
 
 export default function SidebarContainer() {
-  const {
-    planList,
-    selectedPlan,
-    setSelectedPlan,
-    clearCanvas,
-    isDraw,
-    setIsDraw,
-  } = useAppContext(AppContext);
+  const { planList, selectedPlan } = useAppContext(AppContext);
 
   const [plansData, setPlansData] = useState(() => {
     const defaultSections = [
@@ -43,6 +36,11 @@ export default function SidebarContainer() {
 
   const [sectionInput, setSectionInput] = useState("");
 
+  //--Section handlers--
+  function handleSectionInput(value) {
+    setSectionInput(value);
+  }
+
   function handleAddSection() {
     if (sectionInput.trim() === "") return;
 
@@ -60,9 +58,44 @@ export default function SidebarContainer() {
         },
       };
     });
-    setSectionInput("");
+    handleSectionInput("");
   }
 
+  function handleEditSection(sectionName, newSectionName) {
+    setPlansData((prev) => {
+      if (prev[selectedPlan][newSectionName]) {
+        alert("Section name already exists!");
+        return prev;
+      }
+      const sectionToDoList = prev[selectedPlan][sectionName] || [];
+      const updatedSections = {};
+      const entries = Object.entries(prev[selectedPlan]);
+      for (let [key, value] of entries) {
+        if (key === sectionName) {
+          updatedSections[newSectionName] = sectionToDoList;
+        } else {
+          updatedSections[key] = value;
+        }
+      }
+      return {
+        ...prev,
+        [selectedPlan]: updatedSections,
+      };
+    });
+  }
+
+  function handleDeleteSection(sectionName) {
+    setPlansData((prev) => {
+      const updatedSections = { ...prev[selectedPlan] };
+      delete updatedSections[sectionName];
+      return {
+        ...prev,
+        [selectedPlan]: updatedSections,
+      };
+    });
+  }
+
+  //--Item handlers--
   function handleAddItem(sectionName, itemText) {
     setPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
@@ -125,49 +158,13 @@ export default function SidebarContainer() {
     });
   }
 
-  function handleEditSection(sectionName, newSectionName) {
-    setPlansData((prev) => {
-      if (prev[selectedPlan][newSectionName]) {
-        alert("Section name already exists!");
-        return prev;
-      }
-      const sectionToDoList = prev[selectedPlan][sectionName] || [];
-      const updatedSections = {};
-      const entries = Object.entries(prev[selectedPlan]);
-      for (let [key, value] of entries) {
-        if (key === sectionName) {
-          updatedSections[newSectionName] = sectionToDoList;
-        } else {
-          updatedSections[key] = value;
-        }
-      }
-      return {
-        ...prev,
-        [selectedPlan]: updatedSections,
-      };
-    });
-  }
-
-  function handleDeleteSection(sectionName) {
-    setPlansData((prev) => {
-      const updatedSections = { ...prev[selectedPlan] };
-      delete updatedSections[sectionName];
-      return {
-        ...prev,
-        [selectedPlan]: updatedSections,
-      };
-    });
-  }
   const sections = Object.keys(plansData[selectedPlan]);
 
   return (
     <Sidebar
-      planList={planList}
       plansData={plansData}
-      selectedPlan={selectedPlan}
-      setSelectedPlan={setSelectedPlan}
       sectionInput={sectionInput}
-      setSectionInput={setSectionInput}
+      handleSectionInput={handleSectionInput}
       handleAddSection={handleAddSection}
       sections={sections}
       handleAddItem={handleAddItem}
@@ -176,11 +173,6 @@ export default function SidebarContainer() {
       handleEditItem={handleEditItem}
       handleEditSection={handleEditSection}
       handleDeleteSection={handleDeleteSection}
-      clearCanvas={() => {
-        clearCanvas();
-      }}
-      isDraw={isDraw}
-      setIsDraw={setIsDraw}
     />
   );
 }
