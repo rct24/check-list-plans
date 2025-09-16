@@ -1,4 +1,5 @@
 import ListItemContainer from "../containers/ListItemContainer";
+import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
 
 export default function CheckList({
   list,
@@ -18,15 +19,13 @@ export default function CheckList({
   handleSectionNameDoubleClick,
   handleToggleEdit,
   handleDeleteConfirm,
-  handleDeleteSection,
   handleCancelDelete,
-  handleToggleItem,
-  handleDeleteItem,
   handleEditItem,
   handleNewItemChange,
   handleNewItemKeyDown,
   handleItemValueSubmit,
 }) {
+  const { handleDeleteSection } = useSideBarContext(SideBarContext);
   return (
     <div className="card mb-3">
       <div
@@ -97,8 +96,6 @@ export default function CheckList({
             itemObj={itemObj}
             index={index}
             sectionName={sectionName}
-            handleToggleItem={handleToggleItem}
-            handleDeleteItem={handleDeleteItem}
             handleEditItem={handleEditItem}
           />
         ))}

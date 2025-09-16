@@ -1,3 +1,5 @@
+import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
+
 export default function ListItem({
   itemObj,
   index,
@@ -8,12 +10,12 @@ export default function ListItem({
   handleMouseEnter,
   handleMouseLeave,
   handleDoubleClick,
-  handleToggleItem,
-  handleDeleteItem,
   handleEditKeyDown,
   handleEditSubmit,
   handleTextChange,
 }) {
+  const { handleToggleItem, handleDeleteItem } =
+    useSideBarContext(SideBarContext);
   return (
     <li
       className="list-group-item d-flex align-items-center"

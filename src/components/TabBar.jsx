@@ -1,12 +1,11 @@
 import { useContext, useState } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
+import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
 
-export default function TabBar({
-  sectionInput,
-  handleSectionInput,
-  handleAddSection,
-}) {
+export default function TabBar() {
   const { isDraw, handleSetIsDraw, clearCanvas } = useAppContext(AppContext);
+  const { sectionInput, handleSectionInput, handleAddSection } =
+    useSideBarContext(SideBarContext);
   const [activeTab, setActiveTab] = useState("draw");
 
   return (

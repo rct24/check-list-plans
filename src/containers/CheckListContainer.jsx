@@ -1,16 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import CheckList from "../components/CheckList";
+import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
 
 export default function CheckListContainer({
   list,
   sectionName,
   handleAddItem,
-  handleEditSection,
-  handleDeleteSection,
-  handleToggleItem,
-  handleDeleteItem,
-  handleEditItem,
 }) {
+  const { handleEditSection } = useSideBarContext(SideBarContext);
   const [isEditSectionItemsActive, setIsEditSectionItemsActive] =
     useState(false);
   const [newItemInputValue, setNewItemInputValue] = useState("");
@@ -103,11 +100,7 @@ export default function CheckListContainer({
       handleSectionNameDoubleClick={handleSectionNameDoubleClick}
       handleToggleEdit={handleToggleEdit}
       handleDeleteConfirm={handleDeleteConfirm}
-      handleDeleteSection={handleDeleteSection}
       handleCancelDelete={handleCancelDelete}
-      handleToggleItem={handleToggleItem}
-      handleDeleteItem={handleDeleteItem}
-      handleEditItem={handleEditItem}
       handleNewItemChange={handleNewItemChange}
       handleNewItemKeyDown={handleNewItemKeyDown}
       handleItemValueSubmit={handleItemValueSubmit}
