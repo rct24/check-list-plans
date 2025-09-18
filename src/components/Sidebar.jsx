@@ -2,6 +2,7 @@ import { AppContext, useAppContext } from "../context/AppContext";
 import TabBar from "../components/TabBar";
 import CheckListContainer from "../containers/CheckListContainer";
 import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
+
 export default function Sidebar() {
   const { planList, selectedPlan, handleSelectedPlan } =
     useAppContext(AppContext);

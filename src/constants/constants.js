@@ -211,3 +211,110 @@ export const armarePana = {
     },
   ],
 };
+
+export const cofrajStalp = {
+  Elevatie: [
+    {
+      text: "Titlu si scara",
+      checked: false,
+    },
+    {
+      text: "Cotare capat stalp",
+      checked: false,
+    },
+    {
+      text: "Cota gabarit",
+      checked: false,
+    },
+    {
+      text: "Cota ciuperci (Terwa)",
+      checked: false,
+    },
+    {
+      text: "Text Terwa pe cota",
+      checked: false,
+    },
+    {
+      text: "Text cu leader gol φ70",
+      checked: false,
+    },
+    {
+      text: "Text cu leader goluri φ60",
+      checked: false,
+    },
+    {
+      text: "Cote de amprentare baza stalp",
+      checked: false,
+    },
+    {
+      text: "Text piesa de centrare stalp",
+      checked: false,
+    },
+    {
+      text: "Sectiuni stalp pe elevatie",
+      checked: false,
+    },
+  ],
+  Sectiuni: [
+    {
+      text: "Titluri si scara",
+      checked: false,
+    },
+    {
+      text: "Cote pe X",
+      checked: false,
+    },
+    {
+      text: "Cota pe Y",
+      checked: false,
+    },
+    {
+      text: "Reprezentare secitiuni",
+      checked: false,
+    },
+  ],
+  "Piese inglobate": [
+    {
+      text: "Terwa si nr bucati",
+      checked: false,
+    },
+    {
+      text: "Alte piese metalice (table)",
+      checked: false,
+    },
+  ],
+  Note: [
+    {
+      text: "Beton",
+      checked: false,
+    },
+    {
+      text: "Armare",
+      checked: false,
+    },
+  ],
+  "Nota Element": [
+    {
+      text: "Nume ",
+      checked: false,
+    },
+    {
+      text: "Volum",
+      checked: false,
+    },
+    {
+      text: "Greutate",
+      checked: false,
+    },
+  ],
+  Cartus: [
+    {
+      text: "Titlu plan",
+      checked: false,
+    },
+    {
+      text: "Numar plan",
+      checked: false,
+    },
+  ],
+};

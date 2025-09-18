@@ -1,6 +1,6 @@
 import { AppContext } from "./AppContext";
 import { useState, useRef } from "react";
-import { cofrajPana, armarePana } from "../constants/constants";
+import { cofrajPana, armarePana, cofrajStalp } from "../constants/constants";
 
 export function AppContextProvider({ children }) {
   const [planList, setPlanList] = useState([
@@ -42,12 +42,12 @@ export function AppContextProvider({ children }) {
     ];
 
     planList.forEach((plan) => {
-      if (plan.toLowerCase().includes("cofraj")) {
+      if (plan.toLowerCase().includes("cofraj stalp")) {
+        data[plan] = JSON.parse(JSON.stringify(cofrajStalp));
+      } else if (plan.toLowerCase().includes("cofraj")) {
         data[plan] = JSON.parse(JSON.stringify(cofrajPana));
       } else if (plan.toLowerCase().includes("armare")) {
         data[plan] = JSON.parse(JSON.stringify(armarePana));
-      } else if (plan.toLowerCase().includes("cofraj stalp")) {
-        data[plan] = JSON.parse(JSON.stringify(cofrajStalp));
       } else {
         data[plan] = {};
         defaultSections.forEach((section) => {

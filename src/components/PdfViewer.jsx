@@ -24,7 +24,12 @@ function drawGreenCheckMark(ctx, x, y, radius) {
 function drawText(ctx, x, y, text) {
   ctx.save();
   ctx.font = "20px Arial";
-  ctx.fillStyle = "#28a745";
+  // Add white shadow/stroke
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 3;
+  ctx.strokeText(text, x + 20, y);
+  // Draw the green text on top
+  ctx.fillStyle = "#015e17ff";
   ctx.fillText(text, x + 20, y);
   ctx.restore();
 }
@@ -56,7 +61,7 @@ export default function PdfViewer() {
 
     clicks.forEach((click) => {
       drawGreenCheckMark(ctx, click.x, click.y, 10);
-      drawText(ctx, click.x, click.y, click.text);
+      //drawText(ctx, click.x, click.y, click.text);
     });
 
     if (hoverText && isDraw) {
