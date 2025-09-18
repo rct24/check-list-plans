@@ -72,8 +72,6 @@ export function AppContextProvider({ children }) {
     });
   });
 
-  const { section, text } = allItems[0];
-
   const value = {
     isDraw,
     planList,

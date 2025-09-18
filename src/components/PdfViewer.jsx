@@ -30,18 +30,21 @@ function drawText(ctx, x, y, text) {
 }
 
 export default function PdfViewer() {
-  const { selectedPlan, isDraw, canvasRef, allItems, nextItem } =
-    useContext(AppContext);
+  const { selectedPlan, isDraw, canvasRef, allItems } = useContext(AppContext);
   const [clicks, setClicks] = useState([]);
+
   const [hoverText, setHoverText] = useState(null);
+  function handleSetHoverText(value) {
+    setHoverText(value);
+  }
+
   const [index, setIndex] = useState(0);
-
-  const fileName = `${selectedPlan}.pdf`;
-  const containerRef = useRef(null);
-
   function handleSetIndex() {
     setIndex((prev) => prev + 1);
   }
+
+  const fileName = `${selectedPlan}.pdf`;
+  const containerRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -52,7 +55,7 @@ export default function PdfViewer() {
 
     clicks.forEach((click) => {
       drawGreenCheckMark(ctx, click.x, click.y, 10);
-      //drawText(ctx, click.x, click.y, click.text);
+      drawText(ctx, click.x, click.y, click.text);
     });
 
     if (hoverText && isDraw) {
@@ -96,17 +99,17 @@ export default function PdfViewer() {
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
 
-    // Add the new click to state
-    const currentItem = allItems[index]; // Or however you get the current item
-    const text = `${currentItem.section} - ${currentItem.text}`;
-    setClicks((prevClicks) => [...prevClicks, { x, y, text }]);
-
-    handleSetIndex(index);
+    if (index < allItems.length) {
+      const currentItem = allItems[index];
+      const text = `${currentItem.section} - ${currentItem.text}`;
+      setClicks((prevClicks) => [...prevClicks, { x, y, text }]);
+      handleSetIndex(index);
+    }
   }
 
   function handleMouseMove(e) {
     if (!isDraw || !allItems || allItems.length === 0) {
-      setHoverText(null);
+      handleSetHoverText(null);
       return;
     }
 
@@ -119,15 +122,16 @@ export default function PdfViewer() {
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
 
-    // Get the current item's text from the allItems array
-    const currentItem = allItems[index]; // Assuming the first item is the one to be marked
-    const text = `${currentItem.section} - ${currentItem.text}`;
+    if (index < allItems.length) {
+      const currentItem = allItems[index];
+      const text = `${currentItem.section} - ${currentItem.text}`;
 
-    setHoverText({ x, y, text });
+      handleSetHoverText({ x, y, text });
+    }
   }
 
   function handleMouseLeave() {
-    setHoverText(null);
+    handleSetHoverText(null);
   }
 
   return (
