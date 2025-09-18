@@ -1,38 +1,10 @@
 import { useState } from "react";
-import { cofrajPana, armarePana } from "../constants/constants";
 import { AppContext, useAppContext } from "../context/AppContext";
 import { SideBarContext } from "./SidebarContext";
 
 export function SideBarContextProvider({ children }) {
-  const { planList, selectedPlan } = useAppContext(AppContext);
-
-  const [plansData, setPlansData] = useState(() => {
-    const defaultSections = [
-      "Elevatie",
-      "Sectiuni",
-      "Piese inglobate",
-      "Note",
-      "Cartus",
-    ];
-
-    const data = {};
-
-    planList.forEach((plan) => {
-      if (plan.toLowerCase().includes("cofraj")) {
-        data[plan] = JSON.parse(JSON.stringify(cofrajPana));
-      } else if (plan.toLowerCase().includes("armare")) {
-        data[plan] = JSON.parse(JSON.stringify(armarePana));
-      } else if (plan.toLowerCase().includes("cofraj stalp")) {
-        data[plan] = JSON.parse(JSON.stringify(cofrajStalp));
-      } else {
-        data[plan] = {};
-        defaultSections.forEach((section) => {
-          data[plan][section] = [];
-        });
-      }
-    });
-    return data;
-  });
+  const { selectedPlan, plansData, handleSetPlansData } =
+    useAppContext(AppContext);
 
   const [sectionInput, setSectionInput] = useState("");
 
@@ -49,7 +21,7 @@ export function SideBarContextProvider({ children }) {
       return;
     }
 
-    setPlansData((prev) => {
+    handleSetPlansData((prev) => {
       return {
         ...prev,
         [selectedPlan]: {
@@ -62,7 +34,7 @@ export function SideBarContextProvider({ children }) {
   }
 
   function handleEditSection(sectionName, newSectionName) {
-    setPlansData((prev) => {
+    handleSetPlansData((prev) => {
       if (prev[selectedPlan][newSectionName]) {
         alert("Section name already exists!");
         return prev;
@@ -85,7 +57,7 @@ export function SideBarContextProvider({ children }) {
   }
 
   function handleDeleteSection(sectionName) {
-    setPlansData((prev) => {
+    handleSetPlansData((prev) => {
       const updatedSections = { ...prev[selectedPlan] };
       delete updatedSections[sectionName];
       return {
@@ -97,7 +69,7 @@ export function SideBarContextProvider({ children }) {
 
   //--Item handlers--
   function handleAddItem(sectionName, itemText) {
-    setPlansData((prev) => {
+    handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
       return {
         ...prev,
@@ -110,7 +82,7 @@ export function SideBarContextProvider({ children }) {
   }
 
   function handleDeleteItem(sectionName, index) {
-    setPlansData((prev) => {
+    handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
       const newList = sectionList.filter((_, idx) => idx !== index);
       return {
@@ -124,7 +96,7 @@ export function SideBarContextProvider({ children }) {
   }
 
   function handleEditItem(sectionName, index, newTextValue) {
-    setPlansData((prev) => {
+    handleSetPlansData((prev) => {
       const sectionToDoList = prev[selectedPlan][sectionName] || [];
 
       const newList = sectionToDoList.map((item, i) =>
@@ -142,7 +114,7 @@ export function SideBarContextProvider({ children }) {
   }
 
   function handleToggleItem(sectionName, index) {
-    setPlansData((prev) => {
+    handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
       const newList = sectionList.map((item, i) =>
         i === index ? { ...item, checked: !item.checked } : item
@@ -172,6 +144,7 @@ export function SideBarContextProvider({ children }) {
     handleEditItem,
     sections,
   };
+
   return (
     <SideBarContext.Provider value={value}>{children}</SideBarContext.Provider>
   );

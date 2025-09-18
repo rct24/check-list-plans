@@ -1,4 +1,4 @@
-import { useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { AppContext } from "../context/AppContext";
 
 function drawGreenCheckMark(ctx, x, y, radius) {
@@ -21,22 +21,60 @@ function drawGreenCheckMark(ctx, x, y, radius) {
   ctx.restore();
 }
 
-export default function PdfViewer() {
-  const { selectedPlan, isDraw, canvasRef } = useContext(AppContext);
-  const fileName = `${selectedPlan}.pdf`;
+function drawText(ctx, x, y, text) {
+  ctx.save();
+  ctx.font = "20px Arial";
+  ctx.fillStyle = "#28a745";
+  ctx.fillText(text, x + 20, y);
+  ctx.restore();
+}
 
+export default function PdfViewer() {
+  const { selectedPlan, isDraw, canvasRef, allItems, nextItem } =
+    useContext(AppContext);
+  const [clicks, setClicks] = useState([]);
+  const [hoverText, setHoverText] = useState(null);
+  const [index, setIndex] = useState(0);
+
+  const fileName = `${selectedPlan}.pdf`;
   const containerRef = useRef(null);
+
+  function handleSetIndex() {
+    setIndex((prev) => prev + 1);
+  }
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    clicks.forEach((click) => {
+      drawGreenCheckMark(ctx, click.x, click.y, 10);
+      //drawText(ctx, click.x, click.y, click.text);
+    });
+
+    if (hoverText && isDraw) {
+      drawText(ctx, hoverText.x, hoverText.y, hoverText.text);
+    }
+  }, [clicks, hoverText, isDraw]);
 
   useEffect(() => {
     function updateCanvasSize() {
       if (!containerRef.current || !canvasRef.current) return;
-
       const container = containerRef.current;
       const canvas = canvasRef.current;
       const rect = container.getBoundingClientRect();
-
       canvas.width = rect.width;
       canvas.height = rect.height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      clicks.forEach((click) => {
+        drawGreenCheckMark(ctx, click.x, click.y, 10);
+        drawText(ctx, click.x, click.y, click.text);
+      });
     }
 
     updateCanvasSize();
@@ -46,22 +84,50 @@ export default function PdfViewer() {
   }, []);
 
   function handleCanvasOnClick(e) {
-    if (!isDraw) return;
+    if (!isDraw || !allItems || allItems.length === 0) return;
 
     const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    if (canvas) {
-      const ctx = canvas.getContext("2d");
-      const rect = canvas.getBoundingClientRect();
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
 
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
 
-      const x = (e.clientX - rect.left) * scaleX;
-      const y = (e.clientY - rect.top) * scaleY;
+    // Add the new click to state
+    const currentItem = allItems[index]; // Or however you get the current item
+    const text = `${currentItem.section} - ${currentItem.text}`;
+    setClicks((prevClicks) => [...prevClicks, { x, y, text }]);
 
-      drawGreenCheckMark(ctx, x, y, 10);
+    handleSetIndex(index);
+  }
+
+  function handleMouseMove(e) {
+    if (!isDraw || !allItems || allItems.length === 0) {
+      setHoverText(null);
+      return;
     }
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
+
+    // Get the current item's text from the allItems array
+    const currentItem = allItems[index]; // Assuming the first item is the one to be marked
+    const text = `${currentItem.section} - ${currentItem.text}`;
+
+    setHoverText({ x, y, text });
+  }
+
+  function handleMouseLeave() {
+    setHoverText(null);
   }
 
   return (
@@ -88,6 +154,8 @@ export default function PdfViewer() {
         <canvas
           ref={canvasRef}
           onClick={handleCanvasOnClick}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
           style={{
             position: "absolute",
             top: 0,

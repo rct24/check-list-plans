@@ -1,5 +1,6 @@
 import { AppContext } from "./AppContext";
 import { useState, useRef } from "react";
+import { cofrajPana, armarePana } from "../constants/constants";
 
 export function AppContextProvider({ children }) {
   const [planList, setPlanList] = useState([
@@ -29,6 +30,50 @@ export function AppContextProvider({ children }) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
+  const [plansData, setPlansData] = useState(() => {
+    const data = {};
+
+    const defaultSections = [
+      "Elevatie",
+      "Sectiuni",
+      "Piese inglobate",
+      "Note",
+      "Cartus",
+    ];
+
+    planList.forEach((plan) => {
+      if (plan.toLowerCase().includes("cofraj")) {
+        data[plan] = JSON.parse(JSON.stringify(cofrajPana));
+      } else if (plan.toLowerCase().includes("armare")) {
+        data[plan] = JSON.parse(JSON.stringify(armarePana));
+      } else if (plan.toLowerCase().includes("cofraj stalp")) {
+        data[plan] = JSON.parse(JSON.stringify(cofrajStalp));
+      } else {
+        data[plan] = {};
+        defaultSections.forEach((section) => {
+          data[plan][section] = [];
+        });
+      }
+    });
+    return data;
+  });
+
+  function handleSetPlansData(prev) {
+    setPlansData(prev);
+  }
+
+  let allItems = [];
+
+  Object.entries(plansData).forEach(([plan, sectionsObj]) => {
+    Object.entries(sectionsObj).forEach(([section, items]) => {
+      items.forEach((item) => {
+        allItems.push({ plan, section, ...item });
+      });
+    });
+  });
+
+  const { section, text } = allItems[0];
+
   const value = {
     isDraw,
     planList,
@@ -38,6 +83,9 @@ export function AppContextProvider({ children }) {
     handleSetIsDraw,
     canvasRef,
     clearCanvas,
+    allItems,
+    plansData,
+    handleSetPlansData,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

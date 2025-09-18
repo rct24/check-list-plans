@@ -25,6 +25,7 @@ export default function CheckListContainer({
   }, [isEditSectionName]);
 
   const handleMouseEnter = () => setIsHover(true);
+
   const handleMouseLeave = () => setIsHover(false);
 
   const handleSectionNameChange = (e) => setTempSectionName(e.target.value);
