@@ -62,6 +62,22 @@ export function AppContextProvider({ children }) {
     setPlansData(prev);
   }
 
+  function handleCheckBox(sectionName, text) {
+    handleSetPlansData((prev) => {
+      const sectionList = prev[selectedPlan][sectionName] || [];
+      const newList = sectionList.map((item) =>
+        item.text === text ? { ...item, checked: true } : item
+      );
+      return {
+        ...prev,
+        [selectedPlan]: {
+          ...prev[selectedPlan],
+          [sectionName]: newList,
+        },
+      };
+    });
+  }
+
   let allItems = [];
 
   Object.entries(plansData).forEach(([plan, sectionsObj]) => {
@@ -84,6 +100,7 @@ export function AppContextProvider({ children }) {
     allItems,
     plansData,
     handleSetPlansData,
+    handleCheckBox,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

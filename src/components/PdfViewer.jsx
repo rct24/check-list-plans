@@ -30,7 +30,8 @@ function drawText(ctx, x, y, text) {
 }
 
 export default function PdfViewer() {
-  const { selectedPlan, isDraw, canvasRef, allItems } = useContext(AppContext);
+  const { selectedPlan, isDraw, canvasRef, allItems, handleCheckBox } =
+    useContext(AppContext);
   const [clicks, setClicks] = useState([]);
 
   const [hoverText, setHoverText] = useState(null);
@@ -104,6 +105,7 @@ export default function PdfViewer() {
       const text = `${currentItem.section} - ${currentItem.text}`;
       setClicks((prevClicks) => [...prevClicks, { x, y, text }]);
       handleSetIndex(index);
+      handleCheckBox(currentItem.section, currentItem.text);
     }
   }
 
