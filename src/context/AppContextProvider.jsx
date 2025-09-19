@@ -4,7 +4,10 @@ import { cofrajPana, armarePana, cofrajStalp } from "../constants/constants";
 
 export function AppContextProvider({ children }) {
   const [planList, setPlanList] = useState([
-    "R501_Plan cofraj stalp S1_editat",
+    "R501_Plan cofraj stalp S1",
+    "R502_Plan armare stalp S1",
+    "R503_Plan cofraj stalp S2",
+    "R504_Plan armare stalp S2",
   ]);
   const [selectedPlan, setSelectedPlan] = useState(planList[0]);
   const [isDraw, setIsDraw] = useState(false);
