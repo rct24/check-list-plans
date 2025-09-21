@@ -59,41 +59,45 @@ export default function CheckList({
             {sectionName}
           </h5>
         )}
-        <div className="btn-group btn-group-sm">
+        <div className="btn-group btn-group-sm" style={{ width: "100px" }}>
           <button
-            className="btn btn-secondary"
+            className={`btn btn-secondary ${
+              isHover ? "opacity-100" : "opacity-0"
+            }`}
             id={`toggle-edit-${safeSectionName}`}
-            hidden={!isHover}
             onClick={handleToggleEdit}
           >
             {isEditSectionItemsActive ? "✖" : "➕"}
           </button>
           {!isDeleteSectionConfirmed ? (
             <button
-              className="btn btn-warning"
+              className={`btn btn-warning ${
+                isHover ? "opacity-100" : "opacity-0"
+              }`}
               id={`delete-confirm-${safeSectionName}`}
               onClick={handleDeleteConfirm}
-              hidden={!isHover}
             >
-              Delete
+              <i className="bi bi-trash3-fill text-dark-emphasis"></i>
             </button>
           ) : (
             <>
               <button
-                className="btn btn-success"
+                className={`btn btn-success ${
+                  isHover ? "opacity-100" : "opacity-0"
+                }`}
                 id={`delete-confirm-yes-${safeSectionName}`}
                 onClick={() => handleDeleteSection(sectionName)}
-                hidden={!isHover}
               >
-                ✔
+                <i className="bi bi-check-lg"></i>
               </button>
               <button
-                className="btn btn-danger btn-group-sm"
+                className={`btn btn-danger ${
+                  isHover ? "opacity-100" : "opacity-0"
+                }`}
                 id={`delete-confirm-no-${safeSectionName}`}
                 onClick={handleCancelDelete}
-                hidden={!isHover}
               >
-                ❌
+                <i className="bi bi-x-lg"></i>
               </button>
             </>
           )}

@@ -23,21 +23,24 @@ export default function ListItem({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <input
-        className="form-check-input me-2"
-        type="checkbox"
-        id={`checkbox-${sectionName}-${index}`}
-        name={`checkbox-${sectionName}-${index}`}
-        checked={itemObj.checked}
-        onChange={() => handleToggleItem(sectionName, index)}
-      />
-      <div
-        className="flex-grow-1"
-        onDoubleClick={(e) => {
-          e.stopPropagation();
-          handleDoubleClick(e);
-        }}
-      >
+      <div className="form-check">
+        <input
+          className="form-check-input me-2"
+          type="checkbox"
+          id={`checkbox-${sectionName}-${index}`}
+          name={`checkbox-${sectionName}-${index}`}
+          checked={itemObj.checked}
+          onChange={() => handleToggleItem(sectionName, index)}
+          aria-label={`Mark ${itemObj.text} as complete`}
+        />
+        <label
+          className="form-check-label visually-hidden"
+          htmlFor={`checkbox-${sectionName}-${index}`}
+        >
+          Mark {itemObj.text} as complete
+        </label>
+      </div>
+      <div className="flex-grow-1 me-2">
         {isItemEdit ? (
           <input
             type="text"
@@ -52,27 +55,36 @@ export default function ListItem({
           />
         ) : (
           <span
-            className={
+            className={`d-block ${
               itemObj.checked
                 ? "text-decoration-line-through fst-italic opacity-50"
                 : ""
-            }
+            }`}
+            onDoubleClick={(e) => {
+              e.stopPropagation();
+              handleDoubleClick(e);
+            }}
           >
             {itemObj.text}
           </span>
         )}
       </div>
-      <button
-        className="btn btn-sm p-0 px-1 btn-outline-danger ms-4"
-        id={`delete-${sectionName}-${index}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          handleDeleteItem(sectionName, index);
-        }}
-        hidden={!isRowHover}
-      >
-        ❌
-      </button>
+      <div className="flex-shrink-0" style={{ width: "28px" }}>
+        <button
+          className={`btn btn-bg btn-outline-danger p-0 ${
+            isRowHover ? "opacity-100" : "opacity-0"
+          }`}
+          id={`delete-${sectionName}-${index}`}
+          aria-label={`Delete ${itemObj.text}`}
+          title={`Delete ${itemObj.text}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteItem(sectionName, index);
+          }}
+        >
+          <i className="bi bi-trash3-fill"></i>
+        </button>
+      </div>
     </li>
   );
 }

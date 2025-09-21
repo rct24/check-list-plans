@@ -1,6 +1,6 @@
 import PdfViewer from "./components/PdfViewer";
 import SidebarContainer from "./containers/SidebarContainer";
-import { useState, useRef } from "react";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { AppContextProvider } from "./context/AppContextProvider";
 
 function App() {
