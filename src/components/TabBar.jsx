@@ -14,6 +14,8 @@ export default function TabBar() {
         <li className="nav-item">
           <button
             className={`nav-link ${activeTab === "draw" ? "active" : ""}`}
+            id="draw-tab"
+            name="draw-tab"
             onClick={() => setActiveTab("draw")}
             style={{ cursor: "pointer" }}
           >
@@ -23,6 +25,8 @@ export default function TabBar() {
         <li className="nav-item">
           <button
             className={`nav-link ${activeTab === "add" ? "active" : ""}`}
+            id="add-section-tab"
+            name="add-section-tab"
             aria-current={activeTab === "add" ? "page" : undefined}
             onClick={() => setActiveTab("add")}
             style={{ cursor: "pointer" }}
@@ -54,6 +58,8 @@ export default function TabBar() {
           <button
             className="btn btn-primary w-100"
             type="button"
+            id="add-section-submit"
+            name="add-section-submit"
             onClick={handleAddSection}
           >
             Add Section
@@ -67,6 +73,8 @@ export default function TabBar() {
             <button
               className="btn btn-danger me-2"
               type="button"
+              id="draw-stop"
+              name="draw-stop"
               onClick={() => handleSetIsDraw(false)}
             >
               Stop
@@ -75,6 +83,8 @@ export default function TabBar() {
             <button
               className="btn btn-success me-2"
               type="button"
+              id="draw-start"
+              name="draw-start"
               onClick={() => handleSetIsDraw(true)}
             >
               Start
@@ -83,6 +93,8 @@ export default function TabBar() {
           <button
             className="btn btn-secondary"
             type="button"
+            id="draw-clear"
+            name="draw-clear"
             onClick={() => {
               handleSetIsDraw(false);
               clearCanvas();

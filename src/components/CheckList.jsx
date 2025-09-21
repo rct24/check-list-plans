@@ -26,6 +26,11 @@ export default function CheckList({
   handleItemValueSubmit,
 }) {
   const { handleDeleteSection } = useSideBarContext(SideBarContext);
+
+  const safeSectionName = sectionName
+    .replace(/[^a-zA-Z0-9]/g, "-")
+    .toLowerCase();
+
   return (
     <div className="card mb-3">
       <div
@@ -38,6 +43,8 @@ export default function CheckList({
             ref={sectionNameInputRef}
             type="text"
             className="form-control"
+            id={`section-name-edit-${safeSectionName}`}
+            name={`section-name-edit-${safeSectionName}`}
             value={tempSectionName}
             onChange={handleSectionNameChange}
             onKeyDown={handleSectionNameKeyDown}
@@ -54,7 +61,8 @@ export default function CheckList({
         )}
         <div className="btn-group btn-group-sm">
           <button
-            className="btn  btn-secondary"
+            className="btn btn-secondary"
+            id={`toggle-edit-${safeSectionName}`}
             hidden={!isHover}
             onClick={handleToggleEdit}
           >
@@ -63,6 +71,7 @@ export default function CheckList({
           {!isDeleteSectionConfirmed ? (
             <button
               className="btn btn-warning"
+              id={`delete-confirm-${safeSectionName}`}
               onClick={handleDeleteConfirm}
               hidden={!isHover}
             >
@@ -72,6 +81,7 @@ export default function CheckList({
             <>
               <button
                 className="btn btn-success"
+                id={`delete-confirm-yes-${safeSectionName}`}
                 onClick={() => handleDeleteSection(sectionName)}
                 hidden={!isHover}
               >
@@ -79,6 +89,7 @@ export default function CheckList({
               </button>
               <button
                 className="btn btn-danger btn-group-sm"
+                id={`delete-confirm-no-${safeSectionName}`}
                 onClick={handleCancelDelete}
                 hidden={!isHover}
               >
@@ -106,13 +117,19 @@ export default function CheckList({
               <input
                 className="form-control"
                 type="text"
+                id={`new-item-input-${safeSectionName}`}
+                name={`new-item-input-${safeSectionName}`}
                 placeholder="Add new item to list"
                 value={newItemInputValue}
                 onChange={handleNewItemChange}
                 onKeyDown={handleNewItemKeyDown}
               />
             </div>
-            <button className="btn btn-primary" onClick={handleItemValueSubmit}>
+            <button
+              className="btn btn-primary"
+              id={`add-item-button-${safeSectionName}`}
+              onClick={handleItemValueSubmit}
+            >
               Add item
             </button>
           </div>

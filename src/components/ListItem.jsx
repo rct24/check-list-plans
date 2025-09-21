@@ -16,6 +16,7 @@ export default function ListItem({
 }) {
   const { handleToggleItem, handleDeleteItem } =
     useSideBarContext(SideBarContext);
+
   return (
     <li
       className="list-group-item d-flex align-items-center"
@@ -25,6 +26,8 @@ export default function ListItem({
       <input
         className="form-check-input me-2"
         type="checkbox"
+        id={`checkbox-${sectionName}-${index}`}
+        name={`checkbox-${sectionName}-${index}`}
         checked={itemObj.checked}
         onChange={() => handleToggleItem(sectionName, index)}
       />
@@ -39,6 +42,8 @@ export default function ListItem({
           <input
             type="text"
             className="form-control"
+            id={`edit-${sectionName}-${index}`}
+            name={`edit-${sectionName}-${index}`}
             value={textValue}
             onChange={handleTextChange}
             onKeyDown={handleEditKeyDown}
@@ -59,6 +64,7 @@ export default function ListItem({
       </div>
       <button
         className="btn btn-sm p-0 px-1 btn-outline-danger ms-4"
+        id={`delete-${sectionName}-${index}`}
         onClick={(e) => {
           e.stopPropagation();
           handleDeleteItem(sectionName, index);
