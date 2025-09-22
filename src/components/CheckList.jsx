@@ -53,13 +53,13 @@ export default function CheckList({
           />
         ) : (
           <h5
-            className="mb-0 flex-grow-1"
+            className="mb-0 flex-grow-1 text-truncate"
             onDoubleClick={handleSectionNameDoubleClick}
           >
             {sectionName}
           </h5>
         )}
-        <div className="btn-group btn-group-sm" style={{ width: "100px" }}>
+        <div className="btn-group btn-group-sm flex-shrink-0">
           <button
             className={`btn btn-secondary ${
               isHover ? "opacity-100" : "opacity-0"
