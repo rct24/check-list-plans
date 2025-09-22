@@ -5,15 +5,16 @@ import ResizeHandle from "./components/ResizeHandle";
 import { AppContextProvider } from "./context/AppContextProvider";
 
 function App() {
-  const [sidebarWidth, setSidebarWidth] = useState(350);
+  const INITIAL_SIDEBAR_WIDTH = 350;
+
+  const [sidebarWidth, setSidebarWidth] = useState(INITIAL_SIDEBAR_WIDTH);
   const [isResizing, setIsResizing] = useState(false);
   const dragStartXRef = useRef(0);
-  const dragStartWidthRef = useRef(350);
+  const dragStartWidthRef = useRef(INITIAL_SIDEBAR_WIDTH);
   const resizeHandleRef = useRef(null);
-  const currentWidthRef = useRef(350);
+  const currentWidthRef = useRef(INITIAL_SIDEBAR_WIDTH);
 
   const handleResizeStart = (e) => {
-    console.log("Resize start", e.clientX);
     dragStartXRef.current = e.clientX;
     dragStartWidthRef.current = sidebarWidth;
     currentWidthRef.current = sidebarWidth;
@@ -28,8 +29,6 @@ function App() {
 
   const handleResizeEnd = (e) => {
     if (!isResizing) return;
-
-    console.log("Resize end", currentWidthRef.current);
 
     if (e && e.pointerId && resizeHandleRef.current) {
       try {
@@ -47,8 +46,6 @@ function App() {
   useEffect(() => {
     const handlePointerMove = (e) => {
       if (!isResizing) return;
-
-      console.log("Pointer move", e.clientX);
 
       const delta = dragStartXRef.current - e.clientX;
       const newWidth = Math.min(
