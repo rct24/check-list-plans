@@ -76,13 +76,19 @@ export default function PdfViewer({ sidebarWidth }) {
       const canvas = canvasRef.current;
       const rect = container.getBoundingClientRect();
       canvas.width = rect.width;
-      canvas.height = rect.height;
+      canvas.height = rect.height - 56; // Subtract 56px from height
+
+      // Adjust for the canvas's position if needed
+      const topOffset = 56;
 
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       clicks.forEach((click) => {
-        drawGreenCheckMark(ctx, click.x, click.y, 10);
-        drawText(ctx, click.x, click.y, click.text);
+        const adjustedY = click.y - topOffset;
+        if (adjustedY >= 0) {
+          drawGreenCheckMark(ctx, click.x, adjustedY, 10);
+          drawText(ctx, click.x, adjustedY, click.text);
+        }
       });
     }
 
@@ -144,25 +150,20 @@ export default function PdfViewer({ sidebarWidth }) {
   return (
     <div
       ref={containerRef}
+      className="position-fixed h-100 p-3"
       style={{
         width: `calc(100% - ${sidebarWidth}px)`,
-        height: "100vh",
-        position: "fixed",
         top: 0,
         left: 0,
-        padding: "1rem",
         transition: "width 0.1s ease",
       }}
     >
-      <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <div className="position-relative w-100 h-100">
         <iframe
           src={`${import.meta.env.BASE_URL}${fileName}`}
           title="PDF Viewer"
-          className="w-100 h-100 border-0"
+          className="w-100 h-100 border-0 position-absolute top-0 start-0"
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
             right: 0,
             bottom: 0,
             zIndex: 1,
@@ -174,14 +175,11 @@ export default function PdfViewer({ sidebarWidth }) {
           onClick={handleCanvasOnClick}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          className="position-absolute start-0 w-100"
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
+            top: "56px",
+            height: "calc(100% - 56px)",
             right: 0,
-            bottom: 0,
-            width: "100%",
-            height: "100%",
             pointerEvents: isDraw ? "auto" : "none",
             background: "transparent",
             zIndex: 2,
