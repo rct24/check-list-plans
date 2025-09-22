@@ -1,26 +1,37 @@
-export default function ResizeHandle({ width, isResizing, onMouseDown }) {
+export default function ResizeHandle({
+  width,
+  isResizing,
+  onPointerDown,
+  forwardedRef,
+}) {
   return (
     <div
+      ref={forwardedRef}
       className="position-fixed h-100 d-flex align-items-center"
       style={{
         width: "16px",
         left: `calc(100% - ${width}px - 8px)`,
         top: 0,
-        zIndex: 1000,
+        zIndex: 1030,
         cursor: "ew-resize",
+        userSelect: "none",
+        touchAction: "none",
       }}
-      onMouseDown={onMouseDown}
+      onPointerDown={(e) => {
+        e.preventDefault();
+        onPointerDown(e);
+      }}
     >
       <div
-        className="resize-handle d-flex align-items-center bg-light rounded-pill shadow-sm"
+        className={`
+          d-flex align-items-center rounded-pill shadow-sm
+          ${isResizing ? "bg-primary-subtle" : "bg-light"}
+        `}
         style={{
           width: "32px",
           height: "80px",
           transform: "translateX(-8px)",
-          transition: "all 0.2s ease",
-          backgroundColor: isResizing
-            ? "var(--bs-primary-bg-subtle)"
-            : "var(--bs-light)",
+          transition: isResizing ? "none" : "all 0.2s ease",
         }}
       >
         <div className="d-flex flex-column gap-2 mx-auto">
@@ -34,7 +45,6 @@ export default function ResizeHandle({ width, isResizing, onMouseDown }) {
                 width: "4px",
                 height: "4px",
                 opacity: 0.8,
-                transition: "all 0.2s ease",
               }}
             />
           ))}
