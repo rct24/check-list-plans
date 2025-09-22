@@ -1,10 +1,10 @@
 import Sidebar from "../components/Sidebar";
 import { SideBarContextProvider } from "../context/SideBarContextProvider";
 
-export default function SidebarContainer() {
+export default function SidebarContainer({ width }) {
   return (
     <SideBarContextProvider>
-      <Sidebar />
+      <Sidebar width={width} />
     </SideBarContextProvider>
   );
 }

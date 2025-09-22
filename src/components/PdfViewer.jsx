@@ -34,7 +34,7 @@ function drawText(ctx, x, y, text) {
   ctx.restore();
 }
 
-export default function PdfViewer() {
+export default function PdfViewer({ sidebarWidth }) {
   const { selectedPlan, isDraw, canvasRef, allItems, handleCheckBox } =
     useContext(AppContext);
   const [clicks, setClicks] = useState([]);
@@ -144,8 +144,15 @@ export default function PdfViewer() {
   return (
     <div
       ref={containerRef}
-      className="col-10 p-3 vh-100"
-      style={{ position: "relative" }}
+      style={{
+        width: `calc(100% - ${sidebarWidth}px)`,
+        height: "100vh",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        padding: "1rem",
+        transition: "width 0.1s ease",
+      }}
     >
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
         <iframe
