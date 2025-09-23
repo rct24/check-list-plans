@@ -29,9 +29,9 @@ export default function ResizeHandle({
         `}
         style={{
           width: "32px",
-          height: "80px",
+          height: isResizing ? "400px" : "80px",
           transform: "translateX(-8px)",
-          transition: isResizing ? "none" : "all 0.2s ease",
+          transition: isResizing ? "none" : "all 0.5s ease",
         }}
       >
         <div className="d-flex flex-column gap-2 mx-auto">
@@ -42,8 +42,8 @@ export default function ResizeHandle({
                 isResizing ? "bg-primary" : "bg-secondary"
               }`}
               style={{
-                width: "4px",
-                height: "4px",
+                width: "5px",
+                height: "5px",
                 opacity: 0.8,
               }}
             />
