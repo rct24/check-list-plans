@@ -1,5 +1,5 @@
 import ListItemContainer from "../containers/ListItemContainer";
-import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
+import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 
 export default function CheckList({
   list,

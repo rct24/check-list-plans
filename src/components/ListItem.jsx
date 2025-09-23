@@ -1,4 +1,4 @@
-import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
+import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 
 export default function ListItem({
   itemObj,

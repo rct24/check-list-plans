@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
-import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
+import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 
 export default function TabBar() {
   const { isDraw, handleSetIsDraw, clearCanvas } = useAppContext(AppContext);

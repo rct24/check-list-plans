@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
-import { SideBarContext } from "./SidebarContext";
+import { SideBarContext } from "./SideBarContext";
 
 export function SideBarContextProvider({ children }) {
   const { selectedPlan, plansData, handleSetPlansData } =

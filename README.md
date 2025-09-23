@@ -57,6 +57,14 @@ A web application designed for desktop use that helps engineers manage checklist
 - **Responsive Design**: Optimized for desktop viewing, with a mobile blocker to ensure the best user experience.
 - **Persistent Data**: Changes to checklists are managed by React state, allowing for a dynamic user experience.
 
+## Development
+
+### Incremental Development Plan
+
+This project follows the **Incremental Development and Design** methodology. For a detailed roadmap of planned features and architectural improvements, see [INCREMENTAL_DEVELOPMENT_PLAN.md](./INCREMENTAL_DEVELOPMENT_PLAN.md).
+
+The plan outlines 10 stages of development, from the initial MVP to advanced collaboration features, ensuring clean architecture and continuous user value delivery.
+
 ## Technologies Used
 
 - **React**: The core library for building the user interface.
