@@ -24,23 +24,28 @@ export default function CheckListContainer({
     }
   }, [isEditSectionName]);
 
-  // Add global escape key listener when in edit mode
   useEffect(() => {
     const handleGlobalEscape = (e) => {
-      if (e.key === "Escape" && isEditSectionItemsActive) {
-        setIsEditSectionItemsActive(false);
-        setNewItemInputValue("");
+      if (e.key === "Escape") {
+        if (isEditSectionItemsActive) {
+          setIsEditSectionItemsActive(false);
+          setNewItemInputValue("");
+        }
+
+        if (isDeleteSectionConfirmed) {
+          handleCancelDelete();
+        }
       }
     };
 
-    if (isEditSectionItemsActive) {
+    if (isEditSectionItemsActive || isDeleteSectionConfirmed) {
       document.addEventListener("keydown", handleGlobalEscape);
     }
 
     return () => {
       document.removeEventListener("keydown", handleGlobalEscape);
     };
-  }, [isEditSectionItemsActive]);
+  }, [isEditSectionItemsActive, isDeleteSectionConfirmed]);
 
   const handleMouseEnter = () => setIsHover(true);
 
