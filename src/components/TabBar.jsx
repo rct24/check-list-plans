@@ -88,32 +88,34 @@ export default function TabBar() {
 
       {activeTab === "add" && (
         <div className="card-body">
-          <div className="form-floating mb-3">
-            <input
-              className="form-control"
-              id="add-section-input"
-              type="text"
-              name="addSection"
-              placeholder="Add new section"
-              value={sectionInput}
-              onChange={(e) => handleSectionInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleAddSection();
-                }
-              }}
-            />
-            <label htmlFor="add-section-input">Add Section Name</label>
+          <div className="input-group mb-3">
+            <div className="form-floating flex-grow-1">
+              <input
+                className="form-control"
+                id="add-section-input"
+                type="text"
+                name="addSection"
+                placeholder="Add new section"
+                value={sectionInput}
+                onChange={(e) => handleSectionInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleAddSection();
+                  }
+                }}
+              />
+              <label htmlFor="add-section-input">Add Section Name</label>
+            </div>
+            <button
+              className="btn btn-primary"
+              type="button"
+              id="add-section-submit"
+              name="add-section-submit"
+              onClick={handleAddSection}
+            >
+              <i className="bi bi-plus-lg"></i>
+            </button>
           </div>
-          <button
-            className="btn btn-primary w-100"
-            type="button"
-            id="add-section-submit"
-            name="add-section-submit"
-            onClick={handleAddSection}
-          >
-            Add Section
-          </button>
         </div>
       )}
 

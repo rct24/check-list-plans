@@ -24,6 +24,24 @@ export default function CheckListContainer({
     }
   }, [isEditSectionName]);
 
+  // Add global escape key listener when in edit mode
+  useEffect(() => {
+    const handleGlobalEscape = (e) => {
+      if (e.key === "Escape" && isEditSectionItemsActive) {
+        setIsEditSectionItemsActive(false);
+        setNewItemInputValue("");
+      }
+    };
+
+    if (isEditSectionItemsActive) {
+      document.addEventListener("keydown", handleGlobalEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleGlobalEscape);
+    };
+  }, [isEditSectionItemsActive]);
+
   const handleMouseEnter = () => setIsHover(true);
 
   const handleMouseLeave = () => setIsHover(false);
@@ -63,6 +81,10 @@ export default function CheckListContainer({
   const handleNewItemKeyDown = (e) => {
     if (e.key === "Enter") {
       handleItemValueSubmit();
+    }
+    if (e.key === "Escape") {
+      setIsEditSectionItemsActive(false);
+      setNewItemInputValue("");
     }
   };
 
