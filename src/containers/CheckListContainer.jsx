@@ -24,6 +24,29 @@ export default function CheckListContainer({
     }
   }, [isEditSectionName]);
 
+  useEffect(() => {
+    const handleGlobalEscape = (e) => {
+      if (e.key === "Escape") {
+        if (isEditSectionItemsActive) {
+          setIsEditSectionItemsActive(false);
+          setNewItemInputValue("");
+        }
+
+        if (isDeleteSectionConfirmed) {
+          handleCancelDelete();
+        }
+      }
+    };
+
+    if (isEditSectionItemsActive || isDeleteSectionConfirmed) {
+      document.addEventListener("keydown", handleGlobalEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleGlobalEscape);
+    };
+  }, [isEditSectionItemsActive, isDeleteSectionConfirmed]);
+
   const handleMouseEnter = () => setIsHover(true);
 
   const handleMouseLeave = () => setIsHover(false);
@@ -63,6 +86,10 @@ export default function CheckListContainer({
   const handleNewItemKeyDown = (e) => {
     if (e.key === "Enter") {
       handleItemValueSubmit();
+    }
+    if (e.key === "Escape") {
+      setIsEditSectionItemsActive(false);
+      setNewItemInputValue("");
     }
   };
 
