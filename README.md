@@ -39,7 +39,6 @@ Directory structure:
 
 ```
 
-
 # Check List Plans
 
 A web application designed for desktop use that helps engineers manage checklists for engineering plans. The app allows users to select a plan, view its associated checklist, and mark items as complete. It also provides a unique drawing feature where users can add visual checkmarks and text directly onto the PDF of the plan.
@@ -59,12 +58,6 @@ A web application designed for desktop use that helps engineers manage checklist
 
 ## Development
 
-### Incremental Development Plan
-
-This project follows the **Incremental Development and Design** methodology. For a detailed roadmap of planned features and architectural improvements, see [INCREMENTAL_DEVELOPMENT_PLAN.md](./INCREMENTAL_DEVELOPMENT_PLAN.md).
-
-The plan outlines 10 stages of development, from the initial MVP to advanced collaboration features, ensuring clean architecture and continuous user value delivery.
-
 ## Technologies Used
 
 - **React**: The core library for building the user interface.
@@ -79,6 +72,7 @@ The plan outlines 10 stages of development, from the initial MVP to advanced col
 Make sure you have Node.js and npm installed on your machine.
 
 1.  **Clone the repository:**
+
     ```bash
     git clone [https://github.com/rct24/check-list-plans.git](https://github.com/rct24/check-list-plans.git)
     cd check-list-plans
@@ -96,12 +90,9 @@ Make sure you have Node.js and npm installed on your machine.
     npm run dev
     ```
 
-
 ### Building for Production
 
 1.  **Build the project:**
     ```bash
     npm run build
     ```
-
-
