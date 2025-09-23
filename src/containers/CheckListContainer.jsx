@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import CheckList from "../components/CheckList";
-import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
+import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 
 export default function CheckListContainer({
   list,

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
 import TabBar from "../components/TabBar";
 import CheckListContainer from "../containers/CheckListContainer";
-import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
+import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 import ResizeHandle from "./ResizeHandle";
 
 export default function Sidebar({ width }) {

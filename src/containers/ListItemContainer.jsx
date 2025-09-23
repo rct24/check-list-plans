@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ListItem from "../components/ListItem";
-import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
+import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 
 export default function ListItemContainer({
   itemObj,
