@@ -62,7 +62,6 @@ function App() {
     };
 
     const handlePointerUp = (e) => {
-      console.log("Global pointer up");
       handleResizeEnd(e);
     };
 

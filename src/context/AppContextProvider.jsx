@@ -65,11 +65,11 @@ export function AppContextProvider({ children }) {
     setPlansData(prev);
   }
 
-  function handleCheckBox(sectionName, text) {
+  function handleCheckBox(sectionName, text, value) {
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
       const newList = sectionList.map((item) =>
-        item.text === text ? { ...item, checked: true } : item
+        item.text === text ? { ...item, checked: value } : item
       );
       return {
         ...prev,

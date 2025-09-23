@@ -34,38 +34,19 @@ export default function TabBar() {
             Add Section
           </button>
         </li>
-      </ul>
-
-      {activeTab === "add" && (
-        <div className="card-body">
-          <div className="form-floating mb-3">
-            <input
-              className="form-control"
-              id="add-section-input"
-              type="text"
-              name="addSection"
-              placeholder="Add new section"
-              value={sectionInput}
-              onChange={(e) => handleSectionInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleAddSection();
-                }
-              }}
-            />
-            <label htmlFor="add-section-input">Add Section Name</label>
-          </div>
+        <li className="nav-item">
           <button
-            className="btn btn-primary w-100"
-            type="button"
-            id="add-section-submit"
-            name="add-section-submit"
-            onClick={handleAddSection}
+            className={`nav-link ${activeTab === "lorem" ? "active" : ""}`}
+            id="lorem-tab"
+            name="lorem-tab"
+            aria-current={activeTab === "lorem" ? "page" : undefined}
+            onClick={() => setActiveTab("lorem")}
+            style={{ cursor: "pointer" }}
           >
-            Add Section
+            Lorem ipsum
           </button>
-        </div>
-      )}
+        </li>
+      </ul>
 
       {activeTab === "draw" && (
         <div className="card-body">
@@ -100,8 +81,54 @@ export default function TabBar() {
               clearCanvas();
             }}
           >
-            Clear
+            Hide
           </button>
+        </div>
+      )}
+
+      {activeTab === "add" && (
+        <div className="card-body">
+          <div className="form-floating mb-3">
+            <input
+              className="form-control"
+              id="add-section-input"
+              type="text"
+              name="addSection"
+              placeholder="Add new section"
+              value={sectionInput}
+              onChange={(e) => handleSectionInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleAddSection();
+                }
+              }}
+            />
+            <label htmlFor="add-section-input">Add Section Name</label>
+          </div>
+          <button
+            className="btn btn-primary w-100"
+            type="button"
+            id="add-section-submit"
+            name="add-section-submit"
+            onClick={handleAddSection}
+          >
+            Add Section
+          </button>
+        </div>
+      )}
+
+      {activeTab === "lorem" && (
+        <div className="card-body">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+            pulvinar risus non risus hendrerit venenatis. Pellentesque sit amet
+            hendrerit risus, sed porttitor quam.
+          </p>
+          <p>
+            Magna nulla id sed nisl sagittis aliquet. Nam pulvinar turpis
+            bibendum dui commodo, id hendrerit velit suscipit. Morbi id aliquet
+            urna. Aliquam interdum.
+          </p>
         </div>
       )}
     </div>

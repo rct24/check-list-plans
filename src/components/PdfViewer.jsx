@@ -21,15 +21,44 @@ function drawGreenCheckMark(ctx, x, y, radius) {
   ctx.restore();
 }
 
-function drawText(ctx, x, y, text) {
+function drawRedXMark(ctx, x, y, radius) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+  ctx.fillStyle = "#dc3545";
+  ctx.fill();
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "#dc3545";
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = radius * 0.25;
+
+  ctx.moveTo(x - radius * 0.4, y - radius * 0.4);
+  ctx.lineTo(x + radius * 0.4, y + radius * 0.4);
+
+  ctx.moveTo(x + radius * 0.4, y - radius * 0.4);
+  ctx.lineTo(x - radius * 0.4, y + radius * 0.4);
+
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawText(ctx, x, y, text, type = "check") {
   ctx.save();
   ctx.font = "20px Arial";
-  // Add white shadow/stroke
+
   ctx.strokeStyle = "white";
   ctx.lineWidth = 3;
   ctx.strokeText(text, x + 20, y);
-  // Draw the green text on top
-  ctx.fillStyle = "#015e17ff";
+
+  if (type === "x-mark") {
+    ctx.fillStyle = "#dc3545";
+  } else {
+    ctx.fillStyle = "#015e17ff";
+  }
+
   ctx.fillText(text, x + 20, y);
   ctx.restore();
 }
@@ -60,8 +89,12 @@ export default function PdfViewer({ sidebarWidth }) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     clicks.forEach((click) => {
-      drawGreenCheckMark(ctx, click.x, click.y, 10);
-      //drawText(ctx, click.x, click.y, click.text);
+      if (click.type === "check") {
+        drawGreenCheckMark(ctx, click.x, click.y, 10);
+      } else if (click.type === "x-mark") {
+        drawRedXMark(ctx, click.x, click.y, 10);
+        drawText(ctx, click.x, click.y, click.text, "x-mark");
+      }
     });
 
     if (hoverText && isDraw) {
@@ -76,18 +109,23 @@ export default function PdfViewer({ sidebarWidth }) {
       const canvas = canvasRef.current;
       const rect = container.getBoundingClientRect();
       canvas.width = rect.width;
-      canvas.height = rect.height - 56; // Subtract 56px from height
 
-      // Adjust for the canvas's position if needed
       const topOffset = 56;
+      canvas.height = rect.height - topOffset; // Subtract 56px from height
 
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       clicks.forEach((click) => {
         const adjustedY = click.y - topOffset;
         if (adjustedY >= 0) {
-          drawGreenCheckMark(ctx, click.x, adjustedY, 10);
-          drawText(ctx, click.x, adjustedY, click.text);
+          if (click.type === "check") {
+            drawGreenCheckMark(ctx, click.x, adjustedY, 10);
+            drawText(ctx, click.x, adjustedY, click.text);
+          } else if (click.type === "x-mark") {
+            drawRedXMark(ctx, click.x, adjustedY, 10);
+            drawText(ctx, click.x, adjustedY, click.text);
+          }
         }
       });
     }
@@ -111,12 +149,34 @@ export default function PdfViewer({ sidebarWidth }) {
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
 
+    if (e.button === 2) {
+      e.preventDefault();
+    }
+
     if (index < allItems.length) {
       const currentItem = allItems[index];
       const text = `${currentItem.section} - ${currentItem.text}`;
-      setClicks((prevClicks) => [...prevClicks, { x, y, text }]);
+
+      // Add different mark based on button
+      if (e.button === 0) {
+        // Left click - green checkmark
+        setClicks((prevClicks) => [
+          ...prevClicks,
+          { x, y, text, type: "check" },
+        ]);
+        handleCheckBox(currentItem.section, currentItem.text, true);
+      }
+
+      if (e.button === 2) {
+        // Right click - red X mark
+        setClicks((prevClicks) => [
+          ...prevClicks,
+          { x, y, text, type: "x-mark" },
+        ]);
+        handleCheckBox(currentItem.section, currentItem.text, false);
+      }
+
       handleSetIndex(index);
-      handleCheckBox(currentItem.section, currentItem.text);
     }
   }
 
@@ -172,7 +232,8 @@ export default function PdfViewer({ sidebarWidth }) {
         />
         <canvas
           ref={canvasRef}
-          onClick={handleCanvasOnClick}
+          onMouseDown={handleCanvasOnClick}
+          onContextMenu={(e) => e.preventDefault()}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           className="position-absolute start-0 w-100"
