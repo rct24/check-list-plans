@@ -56,8 +56,6 @@ A web application designed for desktop use that helps engineers manage checklist
 - **Responsive Design**: Optimized for desktop viewing, with a mobile blocker to ensure the best user experience.
 - **Persistent Data**: Changes to checklists are managed by React state, allowing for a dynamic user experience.
 
-## Development
-
 ## Technologies Used
 
 - **React**: The core library for building the user interface.
