@@ -21,23 +21,72 @@ function drawGreenCheckMark(ctx, x, y, radius) {
   ctx.restore();
 }
 
-function drawText(ctx, x, y, text) {
+function drawRedXMark(ctx, x, y, radius) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+  ctx.fillStyle = "#dc3545";
+  ctx.fill();
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "#dc3545";
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = radius * 0.25;
+  ctx.moveTo(x - radius * 0.4, y - radius * 0.4);
+  ctx.lineTo(x + radius * 0.4, y + radius * 0.4);
+  ctx.moveTo(x + radius * 0.4, y - radius * 0.4);
+  ctx.lineTo(x - radius * 0.4, y + radius * 0.4);
+
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawText(ctx, x, y, text, type = "check") {
   ctx.save();
   ctx.font = "20px Arial";
-  // Add white shadow/stroke
+
   ctx.strokeStyle = "white";
   ctx.lineWidth = 3;
   ctx.strokeText(text, x + 20, y);
-  // Draw the green text on top
-  ctx.fillStyle = "#015e17ff";
+
+  if (type === "x-mark") {
+    ctx.fillStyle = "#dc3545";
+  } else {
+    ctx.fillStyle = "#015e17ff";
+  }
+
   ctx.fillText(text, x + 20, y);
   ctx.restore();
 }
 
-export default function PdfViewer() {
+export default function PdfViewer({ sidebarWidth }) {
   const { selectedPlan, isDraw, canvasRef, allItems, handleCheckBox } =
     useContext(AppContext);
+
+  const clicksByPlanRef = useRef({});
+
+  const indexByPlanRef = useRef({});
+
   const [clicks, setClicks] = useState([]);
+
+  useEffect(() => {
+    if (clicksByPlanRef.current[selectedPlan] === undefined) {
+      clicksByPlanRef.current[selectedPlan] = [];
+    }
+
+    setClicks(clicksByPlanRef.current[selectedPlan] || []);
+
+    if (indexByPlanRef.current[selectedPlan] === undefined) {
+      indexByPlanRef.current[selectedPlan] = 0;
+    }
+    setIndex(indexByPlanRef.current[selectedPlan]);
+  }, [selectedPlan]);
+
+  useEffect(() => {
+    clicksByPlanRef.current[selectedPlan] = clicks;
+  }, [clicks, selectedPlan]);
 
   const [hoverText, setHoverText] = useState(null);
   function handleSetHoverText(value) {
@@ -46,7 +95,9 @@ export default function PdfViewer() {
 
   const [index, setIndex] = useState(0);
   function handleSetIndex() {
-    setIndex((prev) => prev + 1);
+    const newIndex = index + 1;
+    setIndex(newIndex);
+    indexByPlanRef.current[selectedPlan] = newIndex;
   }
 
   const fileName = `${selectedPlan}.pdf`;
@@ -60,8 +111,12 @@ export default function PdfViewer() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     clicks.forEach((click) => {
-      drawGreenCheckMark(ctx, click.x, click.y, 10);
-      //drawText(ctx, click.x, click.y, click.text);
+      if (click.type === "check") {
+        drawGreenCheckMark(ctx, click.x, click.y, 10);
+      } else if (click.type === "x-mark") {
+        drawRedXMark(ctx, click.x, click.y, 10);
+        drawText(ctx, click.x, click.y, click.text, "x-mark");
+      }
     });
 
     if (hoverText && isDraw) {
@@ -76,13 +131,24 @@ export default function PdfViewer() {
       const canvas = canvasRef.current;
       const rect = container.getBoundingClientRect();
       canvas.width = rect.width;
-      canvas.height = rect.height;
+
+      const topOffset = 56;
+      canvas.height = rect.height - topOffset; // Subtract 56px from height
 
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       clicks.forEach((click) => {
-        drawGreenCheckMark(ctx, click.x, click.y, 10);
-        drawText(ctx, click.x, click.y, click.text);
+        const adjustedY = click.y - topOffset;
+        if (adjustedY >= 0) {
+          if (click.type === "check") {
+            drawGreenCheckMark(ctx, click.x, adjustedY, 10);
+            drawText(ctx, click.x, adjustedY, click.text);
+          } else if (click.type === "x-mark") {
+            drawRedXMark(ctx, click.x, adjustedY, 10);
+            drawText(ctx, click.x, adjustedY, click.text);
+          }
+        }
       });
     }
 
@@ -91,6 +157,18 @@ export default function PdfViewer() {
 
     return () => window.removeEventListener("resize", updateCanvasSize);
   }, []);
+
+  function clearCanvas() {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Clear only current plan's clicks
+    setClicks([]);
+    clicksByPlanRef.current[selectedPlan] = [];
+  }
 
   function handleCanvasOnClick(e) {
     if (!isDraw || !allItems || allItems.length === 0) return;
@@ -105,12 +183,35 @@ export default function PdfViewer() {
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
 
+    if (e.button === 2) {
+      e.preventDefault();
+    }
+
     if (index < allItems.length) {
       const currentItem = allItems[index];
-      const text = `${currentItem.section} - ${currentItem.text}`;
-      setClicks((prevClicks) => [...prevClicks, { x, y, text }]);
+
+      const text = `${currentItem.sectionName} - ${currentItem.item.text}`;
+
+      // Add different mark based on button
+      if (e.button === 0) {
+        // Left click - green checkmark
+        setClicks((prevClicks) => [
+          ...prevClicks,
+          { x, y, text, type: "check" },
+        ]);
+        handleCheckBox(currentItem.sectionName, currentItem.item.text, true);
+      }
+
+      if (e.button === 2) {
+        // Right click - red X mark
+        setClicks((prevClicks) => [
+          ...prevClicks,
+          { x, y, text, type: "x-mark" },
+        ]);
+        handleCheckBox(currentItem.sectionName, currentItem.item.text, false);
+      }
+
       handleSetIndex(index);
-      handleCheckBox(currentItem.section, currentItem.text);
     }
   }
 
@@ -131,7 +232,7 @@ export default function PdfViewer() {
 
     if (index < allItems.length) {
       const currentItem = allItems[index];
-      const text = `${currentItem.section} - ${currentItem.text}`;
+      const text = `${currentItem.sectionName} - ${currentItem.item.text}`;
 
       handleSetHoverText({ x, y, text });
     }
@@ -141,21 +242,25 @@ export default function PdfViewer() {
     handleSetHoverText(null);
   }
 
+  //console.log(plansData[selectedPlan]);
+
   return (
     <div
       ref={containerRef}
-      className="col-10 p-3 vh-100"
-      style={{ position: "relative" }}
+      className="position-fixed h-100 p-3"
+      style={{
+        width: `calc(100% - ${sidebarWidth}px)`,
+        top: 0,
+        left: 0,
+        transition: "width 0.1s ease",
+      }}
     >
-      <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <div className="position-relative w-100 h-100">
         <iframe
           src={`${import.meta.env.BASE_URL}${fileName}`}
           title="PDF Viewer"
-          className="w-100 h-100 border-0"
+          className="w-100 h-100 border-0 position-absolute top-0 start-0"
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
             right: 0,
             bottom: 0,
             zIndex: 1,
@@ -164,17 +269,15 @@ export default function PdfViewer() {
         />
         <canvas
           ref={canvasRef}
-          onClick={handleCanvasOnClick}
+          onMouseDown={handleCanvasOnClick}
+          onContextMenu={(e) => e.preventDefault()}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          className="position-absolute start-0 w-100"
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
+            top: "56px",
+            height: "calc(100% - 56px)",
             right: 0,
-            bottom: 0,
-            width: "100%",
-            height: "100%",
             pointerEvents: isDraw ? "auto" : "none",
             background: "transparent",
             zIndex: 2,

@@ -1,19 +1,25 @@
+import { useState, useRef, useEffect } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
 import TabBar from "../components/TabBar";
 import CheckListContainer from "../containers/CheckListContainer";
 import { SideBarContext, useSideBarContext } from "../context/SidebarContext";
+import ResizeHandle from "./ResizeHandle";
 
-export default function Sidebar() {
-  const { planList, selectedPlan, handleSelectedPlan } =
-    useAppContext(AppContext);
-
-  const { plansData, sections, handleAddItem } =
-    useSideBarContext(SideBarContext);
+export default function Sidebar({ width }) {
+  const { planList, selectedPlan, handleSelectedPlan } = useAppContext();
+  const { plansData, sections, handleAddItem } = useSideBarContext();
+  const sidebarRef = useRef(null);
 
   return (
     <div
-      className="col-2 position-fixed end-0 overflow-auto card shadow-sm p-3"
-      style={{ maxHeight: "100vh", top: "0" }}
+      ref={sidebarRef}
+      className="position-fixed end-0 overflow-auto shadow-lg border-start"
+      style={{
+        width: `${width}px`,
+        maxHeight: "100vh",
+        top: "0",
+        backgroundColor: "var(--bs-white)",
+      }}
     >
       <TabBar />
       <div className="form-floating">
