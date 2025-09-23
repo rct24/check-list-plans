@@ -83,13 +83,21 @@ export function AppContextProvider({ children }) {
 
   let allItems = [];
 
-  Object.entries(plansData).forEach(([plan, sectionsObj]) => {
-    Object.entries(sectionsObj).forEach(([section, items]) => {
-      items.forEach((item) => {
-        allItems.push({ plan, section, ...item });
+  // Object.entries(plansData).forEach(([plan, sectionsObj]) => {
+  //   Object.entries(sectionsObj).forEach(([section, items]) => {
+  //     items.forEach((item) => {
+  //       allItems.push({ plan, section, ...item });
+  //     });
+  //   });
+  // });
+
+  Object.entries(plansData[selectedPlan]).forEach(
+    ([sectionName, sectionsObj]) => {
+      Object.entries(sectionsObj).forEach(([_, item]) => {
+        allItems.push({ selectedPlan, sectionName, item });
       });
-    });
-  });
+    }
+  );
 
   const value = {
     isDraw,

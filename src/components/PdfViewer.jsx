@@ -34,10 +34,8 @@ function drawRedXMark(ctx, x, y, radius) {
   ctx.beginPath();
   ctx.strokeStyle = "#fff";
   ctx.lineWidth = radius * 0.25;
-
   ctx.moveTo(x - radius * 0.4, y - radius * 0.4);
   ctx.lineTo(x + radius * 0.4, y + radius * 0.4);
-
   ctx.moveTo(x + radius * 0.4, y - radius * 0.4);
   ctx.lineTo(x - radius * 0.4, y + radius * 0.4);
 
@@ -66,7 +64,29 @@ function drawText(ctx, x, y, text, type = "check") {
 export default function PdfViewer({ sidebarWidth }) {
   const { selectedPlan, isDraw, canvasRef, allItems, handleCheckBox } =
     useContext(AppContext);
+
+  const clicksByPlanRef = useRef({});
+
+  const indexByPlanRef = useRef({});
+
   const [clicks, setClicks] = useState([]);
+
+  useEffect(() => {
+    if (clicksByPlanRef.current[selectedPlan] === undefined) {
+      clicksByPlanRef.current[selectedPlan] = [];
+    }
+
+    setClicks(clicksByPlanRef.current[selectedPlan] || []);
+
+    if (indexByPlanRef.current[selectedPlan] === undefined) {
+      indexByPlanRef.current[selectedPlan] = 0;
+    }
+    setIndex(indexByPlanRef.current[selectedPlan]);
+  }, [selectedPlan]);
+
+  useEffect(() => {
+    clicksByPlanRef.current[selectedPlan] = clicks;
+  }, [clicks, selectedPlan]);
 
   const [hoverText, setHoverText] = useState(null);
   function handleSetHoverText(value) {
@@ -75,7 +95,9 @@ export default function PdfViewer({ sidebarWidth }) {
 
   const [index, setIndex] = useState(0);
   function handleSetIndex() {
-    setIndex((prev) => prev + 1);
+    const newIndex = index + 1;
+    setIndex(newIndex);
+    indexByPlanRef.current[selectedPlan] = newIndex;
   }
 
   const fileName = `${selectedPlan}.pdf`;
@@ -136,6 +158,18 @@ export default function PdfViewer({ sidebarWidth }) {
     return () => window.removeEventListener("resize", updateCanvasSize);
   }, []);
 
+  function clearCanvas() {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Clear only current plan's clicks
+    setClicks([]);
+    clicksByPlanRef.current[selectedPlan] = [];
+  }
+
   function handleCanvasOnClick(e) {
     if (!isDraw || !allItems || allItems.length === 0) return;
 
@@ -155,7 +189,8 @@ export default function PdfViewer({ sidebarWidth }) {
 
     if (index < allItems.length) {
       const currentItem = allItems[index];
-      const text = `${currentItem.section} - ${currentItem.text}`;
+
+      const text = `${currentItem.sectionName} - ${currentItem.item.text}`;
 
       // Add different mark based on button
       if (e.button === 0) {
@@ -164,7 +199,7 @@ export default function PdfViewer({ sidebarWidth }) {
           ...prevClicks,
           { x, y, text, type: "check" },
         ]);
-        handleCheckBox(currentItem.section, currentItem.text, true);
+        handleCheckBox(currentItem.sectionName, currentItem.item.text, true);
       }
 
       if (e.button === 2) {
@@ -173,7 +208,7 @@ export default function PdfViewer({ sidebarWidth }) {
           ...prevClicks,
           { x, y, text, type: "x-mark" },
         ]);
-        handleCheckBox(currentItem.section, currentItem.text, false);
+        handleCheckBox(currentItem.sectionName, currentItem.item.text, false);
       }
 
       handleSetIndex(index);
@@ -197,7 +232,7 @@ export default function PdfViewer({ sidebarWidth }) {
 
     if (index < allItems.length) {
       const currentItem = allItems[index];
-      const text = `${currentItem.section} - ${currentItem.text}`;
+      const text = `${currentItem.sectionName} - ${currentItem.item.text}`;
 
       handleSetHoverText({ x, y, text });
     }
@@ -206,6 +241,8 @@ export default function PdfViewer({ sidebarWidth }) {
   function handleMouseLeave() {
     handleSetHoverText(null);
   }
+
+  //console.log(plansData[selectedPlan]);
 
   return (
     <div
