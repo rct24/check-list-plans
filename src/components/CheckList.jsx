@@ -134,7 +134,7 @@ export default function CheckList({
               id={`add-item-button-${safeSectionName}`}
               onClick={handleItemValueSubmit}
             >
-              Add item
+              <i class="bi bi-plus-lg"></i>
             </button>
           </div>
         </li>
