@@ -81,20 +81,26 @@ export function AppContextProvider({ children }) {
     });
   }
 
+  {
+    /* Object.entries(plansData).forEach(([plan, sectionsObj]) => {
+      Object.entries(sectionsObj).forEach(([section, items]) => {
+        items.forEach((item) => {
+          allItems.push({ plan, section, ...item });
+          });
+          });
+          });*/
+  }
+
   let allItems = [];
-
-  // Object.entries(plansData).forEach(([plan, sectionsObj]) => {
-  //   Object.entries(sectionsObj).forEach(([section, items]) => {
-  //     items.forEach((item) => {
-  //       allItems.push({ plan, section, ...item });
-  //     });
-  //   });
-  // });
-
   Object.entries(plansData[selectedPlan]).forEach(
     ([sectionName, sectionsObj]) => {
       Object.entries(sectionsObj).forEach(([_, item]) => {
-        allItems.push({ selectedPlan, sectionName, item });
+        allItems.push({
+          id: `${selectedPlan}_${sectionName}_${item.text}`,
+          selectedPlan,
+          sectionName,
+          item,
+        });
       });
     }
   );

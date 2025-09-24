@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect, useContext, useReducer } from "react";
 import { AppContext } from "../context/AppContext";
 
 function drawGreenCheckMark(ctx, x, y, radius) {
@@ -94,6 +94,7 @@ export default function PdfViewer({ sidebarWidth }) {
   }
 
   const [index, setIndex] = useState(0);
+
   function handleSetIndex() {
     const newIndex = index + 1;
     setIndex(newIndex);
@@ -113,6 +114,7 @@ export default function PdfViewer({ sidebarWidth }) {
     clicks.forEach((click) => {
       if (click.type === "check") {
         drawGreenCheckMark(ctx, click.x, click.y, 10);
+        drawText(ctx, click.x, click.y, click.text, "checked");
       } else if (click.type === "x-mark") {
         drawRedXMark(ctx, click.x, click.y, 10);
         drawText(ctx, click.x, click.y, click.text, "x-mark");
@@ -133,7 +135,7 @@ export default function PdfViewer({ sidebarWidth }) {
       canvas.width = rect.width;
 
       const topOffset = 56;
-      canvas.height = rect.height - topOffset; // Subtract 56px from height
+      canvas.height = rect.height - topOffset;
 
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -191,8 +193,8 @@ export default function PdfViewer({ sidebarWidth }) {
       const currentItem = allItems[index];
 
       const text = `${currentItem.sectionName} - ${currentItem.item.text}`;
+      console.log(index, text);
 
-      // Add different mark based on button
       if (e.button === 0) {
         // Left click - green checkmark
         setClicks((prevClicks) => [
@@ -232,6 +234,7 @@ export default function PdfViewer({ sidebarWidth }) {
 
     if (index < allItems.length) {
       const currentItem = allItems[index];
+
       const text = `${currentItem.sectionName} - ${currentItem.item.text}`;
 
       handleSetHoverText({ x, y, text });
@@ -241,8 +244,6 @@ export default function PdfViewer({ sidebarWidth }) {
   function handleMouseLeave() {
     handleSetHoverText(null);
   }
-
-  //console.log(plansData[selectedPlan]);
 
   return (
     <div
