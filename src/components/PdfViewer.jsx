@@ -62,20 +62,27 @@ function drawText(ctx, x, y, text, type = "check") {
 }
 
 export default function PdfViewer({ sidebarWidth }) {
+  // Context
   const { selectedPlan, isDraw, canvasRef, allItems, handleCheckBox } =
     useContext(AppContext);
 
-  const clicksByPlanRef = useRef({});
-
-  const indexByPlanRef = useRef({});
-
+  // useStates
   const [clicks, setClicks] = useState([]);
+  const [hoverText, setHoverText] = useState(null);
+  const [index, setIndex] = useState(0);
 
+  // useRef
+  const clicksByPlanRef = useRef({});
+  const indexByPlanRef = useRef({});
+  const containerRef = useRef(null);
+
+  const fileName = `${selectedPlan}.pdf`;
+
+  // useEffects
   useEffect(() => {
     if (clicksByPlanRef.current[selectedPlan] === undefined) {
       clicksByPlanRef.current[selectedPlan] = [];
     }
-
     setClicks(clicksByPlanRef.current[selectedPlan] || []);
 
     if (indexByPlanRef.current[selectedPlan] === undefined) {
@@ -87,22 +94,6 @@ export default function PdfViewer({ sidebarWidth }) {
   useEffect(() => {
     clicksByPlanRef.current[selectedPlan] = clicks;
   }, [clicks, selectedPlan]);
-
-  const [hoverText, setHoverText] = useState(null);
-  function handleSetHoverText(value) {
-    setHoverText(value);
-  }
-
-  const [index, setIndex] = useState(0);
-
-  function handleSetIndex() {
-    const newIndex = index + 1;
-    setIndex(newIndex);
-    indexByPlanRef.current[selectedPlan] = newIndex;
-  }
-
-  const fileName = `${selectedPlan}.pdf`;
-  const containerRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -159,6 +150,17 @@ export default function PdfViewer({ sidebarWidth }) {
 
     return () => window.removeEventListener("resize", updateCanvasSize);
   }, []);
+
+  // Handlers
+  function handleSetHoverText(value) {
+    setHoverText(value);
+  }
+
+  function handleSetIndex() {
+    const newIndex = index + 1;
+    setIndex(newIndex);
+    indexByPlanRef.current[selectedPlan] = newIndex;
+  }
 
   function clearCanvas() {
     const canvas = canvasRef.current;
@@ -245,6 +247,7 @@ export default function PdfViewer({ sidebarWidth }) {
     handleSetHoverText(null);
   }
 
+  //Render
   return (
     <div
       ref={containerRef}

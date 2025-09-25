@@ -12,6 +12,7 @@ export function AppContextProvider({ children }) {
   const [selectedPlan, setSelectedPlan] = useState(planList[0]);
   const [isDraw, setIsDraw] = useState(false);
   const canvasRef = useRef(null);
+  const allItemsRef = useRef([]);
 
   function handleSelectedPlan(plan) {
     setSelectedPlan(plan);
@@ -81,22 +82,12 @@ export function AppContextProvider({ children }) {
     });
   }
 
-  {
-    /* Object.entries(plansData).forEach(([plan, sectionsObj]) => {
-      Object.entries(sectionsObj).forEach(([section, items]) => {
-        items.forEach((item) => {
-          allItems.push({ plan, section, ...item });
-          });
-          });
-          });*/
-  }
-
   let allItems = [];
   Object.entries(plansData[selectedPlan]).forEach(
     ([sectionName, sectionsObj]) => {
-      Object.entries(sectionsObj).forEach(([_, item]) => {
+      Object.entries(sectionsObj).forEach(([id, item]) => {
         allItems.push({
-          id: `${selectedPlan}_${sectionName}_${item.text}`,
+          id: `${id}_${selectedPlan}_${sectionName}_${item.text}`,
           selectedPlan,
           sectionName,
           item,

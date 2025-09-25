@@ -235,7 +235,7 @@ export const cofrajStalp = {
       checked: false,
     },
     {
-      text: "Text cu leader gol φ70",
+      text: "Text cu leader gol φ90",
       checked: false,
     },
     {
