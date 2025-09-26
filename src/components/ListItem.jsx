@@ -17,22 +17,43 @@ export default function ListItem({
   const { handleToggleItem, handleDeleteItem } =
     useSideBarContext(SideBarContext);
 
+  let spanClasses = ["d-block"];
+  if (itemObj.checked && itemObj.mark === "check") {
+    spanClasses.push(
+      "text-decoration-line-through",
+      "fst-italic",
+      "opacity-50"
+    );
+  } else if (itemObj.checked && itemObj.mark === "x-mark") {
+    spanClasses.push("text-danger", "opacity-75", "fw-bold");
+  }
+
   return (
     <li
       className="list-group-item d-flex align-items-center"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="form-check">
+      <div className="form-check position-relative">
         <input
           className="form-check-input me-2"
           type="checkbox"
           id={`checkbox-${sectionName}-${index}`}
           name={`checkbox-${sectionName}-${index}`}
-          checked={itemObj.checked}
+          checked={itemObj.checked && itemObj.mark === "check"}
           onChange={() => handleToggleItem(sectionName, index)}
           aria-label={`Mark ${itemObj.text} as complete`}
         />
+
+        {itemObj.checked && itemObj.mark === "x-mark" && (
+          <span
+            className="position-absolute top-50 start-0 translate-middle-y"
+            style={{ left: "0.35rem", pointerEvents: "none" }}
+          >
+            <i className="bi bi-x-circle-fill text-danger fs-5"></i>
+          </span>
+        )}
+
         <label
           className="form-check-label visually-hidden"
           htmlFor={`checkbox-${sectionName}-${index}`}
@@ -55,11 +76,7 @@ export default function ListItem({
           />
         ) : (
           <span
-            className={`d-block ${
-              itemObj.checked
-                ? "text-decoration-line-through fst-italic opacity-50"
-                : ""
-            }`}
+            className={spanClasses.join(" ")}
             onDoubleClick={(e) => {
               e.stopPropagation();
               handleDoubleClick(e);

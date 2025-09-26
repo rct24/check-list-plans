@@ -4,13 +4,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import App from "./App.jsx";
 import MobileBlocker from "./components/MobileBlocker";
-import Test from "./Test.jsx";
 
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
-  // </StrictMode>
-  <MobileBlocker>
-    <App />
-    <Test />
-  </MobileBlocker>
+  <StrictMode>
+    <MobileBlocker>
+      <App />
+    </MobileBlocker>
+  </StrictMode>
 );

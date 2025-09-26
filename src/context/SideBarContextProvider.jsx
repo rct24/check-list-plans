@@ -116,14 +116,19 @@ export function SideBarContextProvider({ children }) {
   function handleToggleItem(sectionName, index) {
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
-      const newList = sectionList.map((item, i) =>
-        i === index ? { ...item, checked: !item.checked } : item
-      );
       return {
         ...prev,
         [selectedPlan]: {
           ...prev[selectedPlan],
-          [sectionName]: newList,
+          [sectionName]: sectionList.map((item, idx) =>
+            idx === index
+              ? {
+                  ...item,
+                  checked: !item.checked,
+                  mark: !item.checked ? "check" : "",
+                }
+              : item
+          ),
         },
       };
     });

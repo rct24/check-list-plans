@@ -6,7 +6,8 @@ import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 import ResizeHandle from "./ResizeHandle";
 
 export default function Sidebar({ width }) {
-  const { planList, selectedPlan, handleSelectedPlan } = useAppContext();
+  const { planList, selectedPlan, handleSelectedPlan } =
+    useAppContext(AppContext);
   const { plansData, sections, handleAddItem } = useSideBarContext();
   const sidebarRef = useRef(null);
 

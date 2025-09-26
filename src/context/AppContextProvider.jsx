@@ -1,5 +1,5 @@
 import { AppContext } from "./AppContext";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cofrajPana, armarePana, cofrajStalp } from "../constants/constants";
 
 export function AppContextProvider({ children }) {
@@ -66,11 +66,11 @@ export function AppContextProvider({ children }) {
     setPlansData(prev);
   }
 
-  function handleCheckBox(sectionName, text, value) {
+  function handleCheckBox(sectionName, text, isChecked, mark) {
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
       const newList = sectionList.map((item) =>
-        item.text === text ? { ...item, checked: value } : item
+        item.text === text ? { ...item, checked: isChecked, mark } : item
       );
       return {
         ...prev,

@@ -105,7 +105,7 @@ export default function PdfViewer({ sidebarWidth }) {
     clicks.forEach((click) => {
       if (click.type === "check") {
         drawGreenCheckMark(ctx, click.x, click.y, 10);
-        drawText(ctx, click.x, click.y, click.text, "checked");
+        drawText(ctx, click.x, click.y, click.text, "check");
       } else if (click.type === "x-mark") {
         drawRedXMark(ctx, click.x, click.y, 10);
         drawText(ctx, click.x, click.y, click.text, "x-mark");
@@ -195,7 +195,6 @@ export default function PdfViewer({ sidebarWidth }) {
       const currentItem = allItems[index];
 
       const text = `${currentItem.sectionName} - ${currentItem.item.text}`;
-      console.log(index, text);
 
       if (e.button === 0) {
         // Left click - green checkmark
@@ -203,7 +202,12 @@ export default function PdfViewer({ sidebarWidth }) {
           ...prevClicks,
           { x, y, text, type: "check" },
         ]);
-        handleCheckBox(currentItem.sectionName, currentItem.item.text, true);
+        handleCheckBox(
+          currentItem.sectionName,
+          currentItem.item.text,
+          true,
+          "check"
+        );
       }
 
       if (e.button === 2) {
@@ -212,7 +216,12 @@ export default function PdfViewer({ sidebarWidth }) {
           ...prevClicks,
           { x, y, text, type: "x-mark" },
         ]);
-        handleCheckBox(currentItem.sectionName, currentItem.item.text, false);
+        handleCheckBox(
+          currentItem.sectionName,
+          currentItem.item.text,
+          true,
+          "x-mark"
+        );
       }
 
       handleSetIndex(index);
