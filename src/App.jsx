@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import PdfViewer from "./components/PdfViewer";
+import PdfViewerContainer from "./containers/PdfViewerContainer";
 import SidebarContainer from "./containers/SidebarContainer";
 import ResizeHandle from "./components/ResizeHandle";
 import { AppContextProvider } from "./context/AppContextProvider";
@@ -83,7 +83,7 @@ function App() {
   return (
     <AppContextProvider>
       <div className="container-fluid p-0">
-        <PdfViewer sidebarWidth={sidebarWidth} />
+        <PdfViewerContainer sidebarWidth={sidebarWidth} />
         <ResizeHandle
           forwardedRef={resizeHandleRef}
           width={sidebarWidth}

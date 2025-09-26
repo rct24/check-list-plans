@@ -91,6 +91,7 @@ export function AppContextProvider({ children }) {
           selectedPlan,
           sectionName,
           item,
+          mark: item.mark,
         });
       });
     }

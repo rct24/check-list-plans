@@ -75,7 +75,10 @@ export function SideBarContextProvider({ children }) {
         ...prev,
         [selectedPlan]: {
           ...prev[selectedPlan],
-          [sectionName]: [...sectionList, { text: itemText, checked: false }],
+          [sectionName]: [
+            ...sectionList,
+            { text: itemText, checked: false, mark: undefined },
+          ],
         },
       };
     });
