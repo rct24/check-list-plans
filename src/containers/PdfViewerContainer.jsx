@@ -1,67 +1,27 @@
 import PdfViewer from "../components/PdfViewer";
 import { useState, useRef, useEffect, useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import {
+  drawGreenCheckMark,
+  drawRedXMark,
+  drawText,
+} from "../utils/pdfDrawings";
 
-function drawGreenCheckMark(ctx, x, y, radius) {
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
-  ctx.fillStyle = "#28a745";
-  ctx.fill();
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "#28a745";
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.strokeStyle = "#fff";
-  ctx.lineWidth = radius * 0.25;
-  ctx.moveTo(x - radius * 0.4, y);
-  ctx.lineTo(x - radius * 0.1, y + radius * 0.3);
-  ctx.lineTo(x + radius * 0.5, y - radius * 0.3);
-  ctx.stroke();
-  ctx.restore();
-}
-
-function drawRedXMark(ctx, x, y, radius) {
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
-  ctx.fillStyle = "#dc3545";
-  ctx.fill();
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "#dc3545";
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.strokeStyle = "#fff";
-  ctx.lineWidth = radius * 0.25;
-  ctx.moveTo(x - radius * 0.4, y - radius * 0.4);
-  ctx.lineTo(x + radius * 0.4, y + radius * 0.4);
-  ctx.moveTo(x + radius * 0.4, y - radius * 0.4);
-  ctx.lineTo(x - radius * 0.4, y + radius * 0.4);
-
-  ctx.stroke();
-  ctx.restore();
-}
-
-function drawText(ctx, x, y, text, type = "check") {
-  ctx.save();
-  ctx.font = "20px Arial";
-
-  ctx.strokeStyle = "white";
-  ctx.lineWidth = 3;
-  ctx.strokeText(text, x + 20, y);
-
-  if (type === "x-mark") {
-    ctx.fillStyle = "#dc3545";
-  } else {
-    ctx.fillStyle = "#015e17ff";
-  }
-
-  ctx.fillText(text, x + 20, y);
-  ctx.restore();
-}
-
+/**
+ * PdfViewerContainer manages the PDF viewer and annotation overlay.
+ *
+ * - Imports PdfViewer and React hooks.
+ * - Uses AppContext for shared state (selected plan, draw mode, canvas ref, checklist data, checkbox handler).
+ * - Maintains per-plan annotation clicks and hover text state.
+ * - Provides drawing utilities for checkmarks, X marks, and text on canvas.
+ * - Handles:
+ *    - Drawing annotations and hover text on canvas.
+ *    - Canvas resizing and redrawing on window resize.
+ *    - Filtering out annotations for removed checklist items.
+ *    - Mouse events for drawing and hover preview.
+ *    - Clearing annotations for the current plan.
+ * - Renders PdfViewer, passing refs and event handlers.
+ */
 export default function PdfViewerContainer({ sidebarWidth }) {
   // Context
   const { selectedPlan, isDraw, canvasRef, checkListData, handleCheckBox } =
@@ -81,24 +41,20 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     checkListData || {};
 
   // useEffects
+  // Load clicks for the selected plan
   useEffect(() => {
     if (clicksByPlanRef.current[selectedPlan] === undefined) {
       clicksByPlanRef.current[selectedPlan] = [];
     }
     setClicks(clicksByPlanRef.current[selectedPlan] || []);
-
-    {
-      /*if (indexByPlanRef.current[selectedPlan] === undefined) {
-      indexByPlanRef.current[selectedPlan] = 0;
-    }
-    setIndex(indexByPlanRef.current[selectedPlan]);*/
-    }
   }, [selectedPlan]);
 
+  // Save clicks to the ref object whenever they change
   useEffect(() => {
     clicksByPlanRef.current[selectedPlan] = clicks;
   }, [clicks, selectedPlan]);
 
+  // Draw clicks and hover text
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -121,6 +77,7 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     }
   }, [clicks, hoverText, isDraw]);
 
+  // Adjust canvas size and redraw on window resize
   useEffect(() => {
     function updateCanvasSize() {
       if (!containerRef.current || !canvasRef.current) return;
@@ -155,17 +112,26 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     return () => window.removeEventListener("resize", updateCanvasSize);
   }, []);
 
+  // Clean up clicks that no longer correspond to any checklist item
+  useEffect(() => {
+    if (!checkListData) return;
+
+    const validTexts = new Set(
+      (checkList || []).map((item) => `${item.sectionName} - ${item.item.text}`)
+    );
+
+    setClicks((prevClicks) =>
+      prevClicks.filter((click) => validTexts.has(click.text))
+    );
+  }, [checkListData, selectedPlan]);
+
   // Handlers
+  //
   function handleSetHoverText(value) {
     setHoverText(value);
   }
 
-  // function handleSetIndex() {
-  //   const newIndex = index + 1;
-  //   setIndex(newIndex);
-  //   indexByPlanRef.current[selectedPlan] = newIndex;
-  // }
-
+  //to be continued...
   function clearCanvas() {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -178,6 +144,7 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     clicksByPlanRef.current[selectedPlan] = [];
   }
 
+  // Expose clearCanvas function to context or parent if needed
   function handleCanvasOnClick(e) {
     if (!isDraw || !checkList.length || index === -1) return;
 
@@ -230,6 +197,7 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     }
   }
 
+  // Show hover text near cursor when in draw mode and there is an unchecked item
   function handleMouseMove(e) {
     if (!isDraw || !checkList.length || index === -1) {
       handleSetHoverText(null);
@@ -254,10 +222,12 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     }
   }
 
+  // Clear hover text when mouse leaves canvas
   function handleMouseLeave() {
     handleSetHoverText(null);
   }
 
+  // Render
   return (
     <PdfViewer
       sidebarWidth={sidebarWidth}
