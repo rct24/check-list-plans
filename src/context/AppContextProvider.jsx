@@ -1,5 +1,5 @@
 import { AppContext } from "./AppContext";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { cofrajPana, armarePana, cofrajStalp } from "../constants/constants";
 
 export function AppContextProvider({ children }) {
@@ -82,20 +82,27 @@ export function AppContextProvider({ children }) {
     });
   }
 
-  let allItems = [];
-  Object.entries(plansData[selectedPlan]).forEach(
-    ([sectionName, sectionsObj]) => {
-      Object.entries(sectionsObj).forEach(([id, item]) => {
-        allItems.push({
-          id: `${id}_${selectedPlan}_${sectionName}_${item.text}`,
-          selectedPlan,
-          sectionName,
-          item,
-          mark: item.mark,
+  const checkListData = useMemo(() => {
+    let items = [];
+    let firstUncheckedIndex = -1;
+    Object.entries(plansData[selectedPlan]).forEach(
+      ([sectionName, itemsArray]) => {
+        itemsArray.forEach((item, idx) => {
+          items.push({
+            id: `${idx}_${selectedPlan}_${sectionName}_${item.text}`,
+            selectedPlan,
+            sectionName,
+            item,
+            mark: item.mark,
+          });
+          if (firstUncheckedIndex === -1 && item.checked === false) {
+            firstUncheckedIndex = items.length - 1;
+          }
         });
-      });
-    }
-  );
+      }
+    );
+    return { items, firstUncheckedIndex };
+  }, [plansData, selectedPlan]);
 
   const value = {
     isDraw,
@@ -106,7 +113,7 @@ export function AppContextProvider({ children }) {
     handleSetIsDraw,
     canvasRef,
     clearCanvas,
-    allItems,
+    checkListData,
     plansData,
     handleSetPlansData,
     handleCheckBox,

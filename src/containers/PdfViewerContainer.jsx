@@ -64,20 +64,21 @@ function drawText(ctx, x, y, text, type = "check") {
 
 export default function PdfViewerContainer({ sidebarWidth }) {
   // Context
-  const { selectedPlan, isDraw, canvasRef, allItems, handleCheckBox } =
+  const { selectedPlan, isDraw, canvasRef, checkListData, handleCheckBox } =
     useContext(AppContext);
 
   // useStates
   const [clicks, setClicks] = useState([]);
   const [hoverText, setHoverText] = useState(null);
-  const [index, setIndex] = useState(0);
 
   // useRef
   const clicksByPlanRef = useRef({});
-  const indexByPlanRef = useRef({});
   const containerRef = useRef(null);
 
+  // variables
   const fileName = `${selectedPlan}.pdf`;
+  const { items: checkList = [], firstUncheckedIndex: index = -1 } =
+    checkListData || {};
 
   // useEffects
   useEffect(() => {
@@ -86,10 +87,12 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     }
     setClicks(clicksByPlanRef.current[selectedPlan] || []);
 
-    if (indexByPlanRef.current[selectedPlan] === undefined) {
+    {
+      /*if (indexByPlanRef.current[selectedPlan] === undefined) {
       indexByPlanRef.current[selectedPlan] = 0;
     }
-    setIndex(indexByPlanRef.current[selectedPlan]);
+    setIndex(indexByPlanRef.current[selectedPlan]);*/
+    }
   }, [selectedPlan]);
 
   useEffect(() => {
@@ -157,11 +160,11 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     setHoverText(value);
   }
 
-  function handleSetIndex() {
-    const newIndex = index + 1;
-    setIndex(newIndex);
-    indexByPlanRef.current[selectedPlan] = newIndex;
-  }
+  // function handleSetIndex() {
+  //   const newIndex = index + 1;
+  //   setIndex(newIndex);
+  //   indexByPlanRef.current[selectedPlan] = newIndex;
+  // }
 
   function clearCanvas() {
     const canvas = canvasRef.current;
@@ -176,7 +179,7 @@ export default function PdfViewerContainer({ sidebarWidth }) {
   }
 
   function handleCanvasOnClick(e) {
-    if (!isDraw || !allItems || allItems.length === 0) return;
+    if (!isDraw || !checkList.length || index === -1) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -192,8 +195,8 @@ export default function PdfViewerContainer({ sidebarWidth }) {
       e.preventDefault();
     }
 
-    if (index < allItems.length) {
-      const currentItem = allItems[index];
+    if (index < checkList.length) {
+      const currentItem = checkList[index];
 
       const text = `${currentItem.sectionName} - ${currentItem.item.text}`;
 
@@ -224,13 +227,11 @@ export default function PdfViewerContainer({ sidebarWidth }) {
           "x-mark"
         );
       }
-
-      handleSetIndex(index);
     }
   }
 
   function handleMouseMove(e) {
-    if (!isDraw || !allItems || allItems.length === 0) {
+    if (!isDraw || !checkList.length || index === -1) {
       handleSetHoverText(null);
       return;
     }
@@ -244,8 +245,8 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
 
-    if (index < allItems.length) {
-      const currentItem = allItems[index];
+    if (index < checkList.length) {
+      const currentItem = checkList[index];
 
       const text = `${currentItem.sectionName} - ${currentItem.item.text}`;
 
@@ -256,6 +257,7 @@ export default function PdfViewerContainer({ sidebarWidth }) {
   function handleMouseLeave() {
     handleSetHoverText(null);
   }
+
   return (
     <PdfViewer
       sidebarWidth={sidebarWidth}
