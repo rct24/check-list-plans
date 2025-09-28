@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import CheckList from "../components/CheckList";
 import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 
@@ -109,9 +109,11 @@ export default function CheckListContainer({
     setIsEditSectionName(false);
   }
 
+  const memoizedList = useMemo(() => list, [list]);
+
   return (
     <CheckList
-      list={list}
+      list={memoizedList}
       sectionName={sectionName}
       isHover={isHover}
       isEditSectionName={isEditSectionName}
