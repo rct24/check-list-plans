@@ -2,6 +2,7 @@ import { AppContext } from "./AppContext";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { cofrajPana, armarePana, cofrajStalp } from "../constants/constants";
 
+// App Context Provider Component
 export function AppContextProvider({ children }) {
   const [planList, setPlanList] = useState([
     "R501_Plan cofraj stalp S1",
@@ -9,22 +10,30 @@ export function AppContextProvider({ children }) {
     "R503_Plan cofraj stalp S2",
     "R504_Plan armare stalp S2",
   ]);
-  const [selectedPlan, setSelectedPlan] = useState(planList[0]);
-  const [isDraw, setIsDraw] = useState(false);
-  const canvasRef = useRef(null);
-  const allItemsRef = useRef([]);
 
+  // Selected Plan State
+  const [selectedPlan, setSelectedPlan] = useState(planList[0]);
+  // Drawing State
+  const [isDraw, setIsDraw] = useState(false);
+
+  const canvasRef = useRef(null);
+
+  // Set selected plan
   function handleSelectedPlan(plan) {
     setSelectedPlan(plan);
   }
 
+  // Set isDraw
   function handleSetIsDraw(value) {
     setIsDraw(value);
   }
+
+  // Update plan list
   function handleSetPlanList(plan) {
     setPlanList(plan);
   }
 
+  // Clear canvas
   function clearCanvas() {
     const canvas = canvasRef.current;
     if (!canvas) {
@@ -34,6 +43,7 @@ export function AppContextProvider({ children }) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
+  // Plans Data State
   const [plansData, setPlansData] = useState(() => {
     const data = {};
 
@@ -45,6 +55,7 @@ export function AppContextProvider({ children }) {
       "Cartus",
     ];
 
+    // Initialize plansData with default sections for each plan
     planList.forEach((plan) => {
       if (plan.toLowerCase().includes("cofraj stalp")) {
         data[plan] = JSON.parse(JSON.stringify(cofrajStalp));
@@ -66,6 +77,7 @@ export function AppContextProvider({ children }) {
     setPlansData(prev);
   }
 
+  // Handle checkbox toggle
   function handleCheckBox(sectionName, text, isChecked, mark) {
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
@@ -82,6 +94,7 @@ export function AppContextProvider({ children }) {
     });
   }
 
+  // Memoized checklist data
   const checkListData = useMemo(() => {
     let items = [];
     let firstUncheckedIndex = -1;

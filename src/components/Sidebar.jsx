@@ -24,12 +24,13 @@ export default function Sidebar({ width }) {
       }}
     >
       <TabBar />
+
       <PlanSelector
         planList={planList}
         selectedPlan={selectedPlan}
         onPlanChange={handleSelectedPlan}
       />
-      <br />
+
       {sections.map((sectionName) => (
         <CheckListContainer
           key={sectionName}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
 import { SideBarContext } from "./SideBarContext";
 
+// SideBar Context Provider Component
 export function SideBarContextProvider({ children }) {
   const { selectedPlan, plansData, handleSetPlansData } =
     useAppContext(AppContext);
@@ -12,7 +13,7 @@ export function SideBarContextProvider({ children }) {
   function handleSectionInput(value) {
     setSectionInput(value);
   }
-
+  // Add new section
   function handleAddSection() {
     if (sectionInput.trim() === "") return;
 
@@ -32,7 +33,7 @@ export function SideBarContextProvider({ children }) {
     });
     handleSectionInput("");
   }
-
+  // Edit section name
   function handleEditSection(sectionName, newSectionName) {
     handleSetPlansData((prev) => {
       if (prev[selectedPlan][newSectionName]) {
@@ -55,7 +56,7 @@ export function SideBarContextProvider({ children }) {
       };
     });
   }
-
+  // Delete section
   function handleDeleteSection(sectionName) {
     handleSetPlansData((prev) => {
       const updatedSections = { ...prev[selectedPlan] };
@@ -68,6 +69,7 @@ export function SideBarContextProvider({ children }) {
   }
 
   //--Item handlers--
+  // Add new item to section
   function handleAddItem(sectionName, itemText) {
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
@@ -84,6 +86,7 @@ export function SideBarContextProvider({ children }) {
     });
   }
 
+  // Delete item from section
   function handleDeleteItem(sectionName, index) {
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
@@ -98,6 +101,7 @@ export function SideBarContextProvider({ children }) {
     });
   }
 
+  // Edit item text
   function handleEditItem(sectionName, index, newTextValue) {
     handleSetPlansData((prev) => {
       const sectionToDoList = prev[selectedPlan][sectionName] || [];
@@ -116,6 +120,7 @@ export function SideBarContextProvider({ children }) {
     });
   }
 
+  // Toggle item checked state
   function handleToggleItem(sectionName, index) {
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];

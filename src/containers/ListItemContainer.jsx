@@ -9,26 +9,38 @@ export default function ListItemContainer({
   handleToggleItem,
   handleDeleteItem,
 }) {
+  // States and Context
   const [isRowHover, setIsRowHover] = useState(false);
   const [isItemEdit, setIsItemEdit] = useState(false);
   const [textValue, setTextValue] = useState(itemObj.text);
   const { handleEditItem } = useSideBarContext(SideBarContext);
+
+  // Sync textValue with itemObj.text
   useEffect(() => {
     setTextValue(itemObj.text);
   }, [itemObj.text]);
 
+  // Handle mouse enter
   function handleMouseEnter() {
     setIsRowHover(true);
   }
+
+  // Handle mouse leave
   function handleMouseLeave() {
     setIsRowHover(false);
   }
+
+  // Handle double click to enter edit mode
   function handleDoubleClick() {
     setIsItemEdit(true);
   }
+
+  // Handle text change in edit mode
   function handleTextChange(e) {
     setTextValue(e.target.value);
   }
+
+  // Handle key down in edit mode
   function handleEditKeyDown(e) {
     if (e.key === "Enter") {
       handleEditSubmit();
@@ -38,6 +50,8 @@ export default function ListItemContainer({
       setTextValue(itemObj.text);
     }
   }
+
+  // Submit edit
   function handleEditSubmit() {
     if (textValue.trim() === "") return;
     handleEditItem(sectionName, index, textValue);

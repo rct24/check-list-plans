@@ -1,6 +1,6 @@
 export default function PlanSelector({ planList, selectedPlan, onPlanChange }) {
   return (
-    <div className="form-floating">
+    <div className="form-floating mb-3">
       <select
         className="form-select"
         id="plan-selection"
