@@ -1,14 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
 import TabBar from "../components/TabBar";
 import CheckListContainer from "../containers/CheckListContainer";
+import PlanSelector from "./PlanSelector";
 import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
-import ResizeHandle from "./ResizeHandle";
 
 export default function Sidebar({ width }) {
   const { planList, selectedPlan, handleSelectedPlan } =
     useAppContext(AppContext);
-  const { plansData, sections, handleAddItem } = useSideBarContext();
+  const { plansData, sections, handleAddItem } =
+    useSideBarContext(SideBarContext);
   const sidebarRef = useRef(null);
 
   return (
@@ -23,24 +24,11 @@ export default function Sidebar({ width }) {
       }}
     >
       <TabBar />
-      <div className="form-floating">
-        <select
-          className="form-select"
-          id="plan-selection"
-          name="plans"
-          value={selectedPlan}
-          onChange={(e) => handleSelectedPlan(e.target.value)}
-        >
-          {planList.map((plan) => (
-            <option key={plan} value={plan}>
-              {plan}
-            </option>
-          ))}
-        </select>
-        <label className="form-check-label" htmlFor="plan-selection">
-          Plan selection:
-        </label>
-      </div>
+      <PlanSelector
+        planList={planList}
+        selectedPlan={selectedPlan}
+        onPlanChange={handleSelectedPlan}
+      />
       <br />
       {sections.map((sectionName) => (
         <CheckListContainer

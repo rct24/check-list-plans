@@ -1,17 +1,6 @@
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 
-/**
- * PdfViewer component displays a PDF file in an iframe and overlays a canvas for drawing or interaction.
- * It uses context to determine drawing mode and manages pointer events accordingly.
- * Props:
- * - sidebarWidth: width of the sidebar to offset the viewer
- * - containerRef: ref for the container div
- * - fileName: PDF file to display
- * - handleCanvasOnClick: handler for canvas mouse down
- * - handleMouseMove: handler for mouse move on canvas
- * - handleMouseLeave: handler for mouse leave on canvas
- */
 export default function PdfViewer({
   sidebarWidth,
   containerRef,
