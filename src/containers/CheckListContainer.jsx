@@ -1,139 +1,54 @@
-import React, { useMemo, useState, useEffect, useRef } from "react";
 import CheckList from "../components/CheckList";
-import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
+import { useSideBarContext } from "../context/SideBarContext";
+import useSectionLogicCRUD from "../hooks/useSectionLogicCRUD";
+import useItemLogicCRUD from "../hooks/useItemLogicCRUD";
 
 export default function CheckListContainer({
   list,
   sectionName,
   handleAddItem,
 }) {
-  const { handleEditSection } = useSideBarContext(SideBarContext);
-  const [isEditSectionItemsActive, setIsEditSectionItemsActive] =
-    useState(false);
-  const [newItemInputValue, setNewItemInputValue] = useState("");
-  const [isHover, setIsHover] = useState(false);
-  const [isDeleteSectionConfirmed, setIsDeleteSectionConfirmed] =
-    useState(false);
-  const [isEditSectionName, setIsEditSectionName] = useState(false);
-  const [tempSectionName, setTempSectionName] = useState(sectionName);
-  const sectionNameInputRef = useRef(null);
+  const { handleEditSection, handleDeleteSection } = useSideBarContext();
 
-  useEffect(() => {
-    if (isEditSectionName && sectionNameInputRef.current) {
-      sectionNameInputRef.current.focus();
-    }
-  }, [isEditSectionName]);
+  const sectionCrud = useSectionLogicCRUD({
+    sectionName,
+    handleEditSection,
+    handleDeleteSection,
+  });
+  const itemsCrud = useItemLogicCRUD({
+    list,
+    handleAddItem,
+  });
 
-  useEffect(() => {
-    const handleGlobalEscape = (e) => {
-      if (e.key === "Escape") {
-        if (isEditSectionItemsActive) {
-          setIsEditSectionItemsActive(false);
-          setNewItemInputValue("");
-        }
-
-        if (isDeleteSectionConfirmed) {
-          handleCancelDelete();
-        }
-      }
-    };
-
-    if (isEditSectionItemsActive || isDeleteSectionConfirmed) {
-      document.addEventListener("keydown", handleGlobalEscape);
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleGlobalEscape);
-    };
-  }, [isEditSectionItemsActive, isDeleteSectionConfirmed]);
-
-  const handleMouseEnter = () => setIsHover(true);
-
-  const handleMouseLeave = () => setIsHover(false);
-
-  const handleSectionNameChange = (e) => setTempSectionName(e.target.value);
-
-  const handleSectionNameKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSectionNameSubmit();
-    }
-    if (e.key === "Escape") {
-      setIsEditSectionName(false);
-      setTempSectionName(sectionName);
-    }
+  const logic = {
+    ...sectionCrud,
+    ...itemsCrud,
   };
-
-  const handleSectionNameDoubleClick = () => {
-    setIsEditSectionName(true);
-  };
-
-  const handleToggleEdit = () => {
-    setIsEditSectionItemsActive((prev) => !prev);
-  };
-
-  const handleDeleteConfirm = () => {
-    setIsDeleteSectionConfirmed(true);
-  };
-
-  const handleCancelDelete = () => {
-    setIsDeleteSectionConfirmed(false);
-  };
-
-  const handleNewItemChange = (e) => {
-    setNewItemInputValue(e.target.value);
-  };
-
-  const handleNewItemKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleItemValueSubmit();
-    }
-    if (e.key === "Escape") {
-      setIsEditSectionItemsActive(false);
-      setNewItemInputValue("");
-    }
-  };
-
-  function handleItemValueSubmit() {
-    if (newItemInputValue.trim() === "") return;
-    handleAddItem(newItemInputValue);
-    setNewItemInputValue("");
-  }
-
-  function handleSectionNameSubmit() {
-    if (tempSectionName.trim() === "" || tempSectionName === sectionName) {
-      setIsEditSectionName(false);
-      setTempSectionName(sectionName);
-      return;
-    }
-    handleEditSection(sectionName, tempSectionName);
-    setIsEditSectionName(false);
-  }
-
-  const memoizedList = useMemo(() => list, [list]);
 
   return (
     <CheckList
-      list={memoizedList}
+      list={logic.memoizedList}
       sectionName={sectionName}
-      isHover={isHover}
-      isEditSectionName={isEditSectionName}
-      isEditSectionItemsActive={isEditSectionItemsActive}
-      isDeleteSectionConfirmed={isDeleteSectionConfirmed}
-      tempSectionName={tempSectionName}
-      newItemInputValue={newItemInputValue}
-      sectionNameInputRef={sectionNameInputRef}
-      handleMouseEnter={handleMouseEnter}
-      handleMouseLeave={handleMouseLeave}
-      handleSectionNameChange={handleSectionNameChange}
-      handleSectionNameKeyDown={handleSectionNameKeyDown}
-      handleSectionNameSubmit={handleSectionNameSubmit}
-      handleSectionNameDoubleClick={handleSectionNameDoubleClick}
-      handleToggleEdit={handleToggleEdit}
-      handleDeleteConfirm={handleDeleteConfirm}
-      handleCancelDelete={handleCancelDelete}
-      handleNewItemChange={handleNewItemChange}
-      handleNewItemKeyDown={handleNewItemKeyDown}
-      handleItemValueSubmit={handleItemValueSubmit}
+      isHover={logic.isHover}
+      isEditSectionName={logic.isEditSectionName}
+      isEditSectionItemsActive={logic.isEditSectionItemsActive}
+      isDeleteSectionConfirmed={logic.isDeleteSectionConfirmed}
+      tempSectionName={logic.tempSectionName}
+      newItemInputValue={logic.newItemInputValue}
+      sectionNameInputRef={logic.sectionNameInputRef}
+      handleMouseEnter={logic.handleMouseEnter}
+      handleMouseLeave={logic.handleMouseLeave}
+      handleSectionNameChange={logic.handleSectionNameChange}
+      handleSectionNameKeyDown={logic.handleSectionNameKeyDown}
+      handleSectionNameSubmit={logic.handleSectionNameSubmit}
+      handleSectionNameDoubleClick={logic.handleSectionNameDoubleClick}
+      handleToggleEdit={logic.handleToggleEdit}
+      handleDeleteConfirm={logic.handleDeleteConfirm}
+      handleCancelDelete={logic.handleCancelDelete}
+      handleNewItemChange={logic.handleNewItemChange}
+      handleNewItemKeyDown={logic.handleNewItemKeyDown}
+      handleItemValueSubmit={logic.handleItemValueSubmit}
+      handleDeleteSection={logic.handleDeleteSection}
     />
   );
 }
