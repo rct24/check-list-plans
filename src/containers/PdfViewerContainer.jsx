@@ -22,6 +22,7 @@ import {
  *    - Clearing annotations for the current plan.
  * - Renders PdfViewer, passing refs and event handlers.
  */
+
 export default function PdfViewerContainer({ sidebarWidth }) {
   // Context
   const { selectedPlan, isDraw, canvasRef, checkListData, handleCheckBox } =

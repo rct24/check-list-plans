@@ -54,9 +54,32 @@ export default function CheckList({
         ) : (
           <h5
             className="mb-0 flex-grow-1 text-truncate"
+            style={{
+              position: "relative",
+              cursor: isHover ? "pointer" : "default",
+              opacity: isHover ? 0.7 : 1,
+              transition: "opacity 0.2s, background 0.2s",
+            }}
+            title="Double-click or click the pencil to edit"
             onDoubleClick={handleSectionNameDoubleClick}
           >
             {sectionName}
+            <i
+              className={`bi bi-pencil-square ms-2 text-primary transition
+              ${isHover ? "opacity-100" : "opacity-0"}`}
+              aria-hidden="true"
+              title="Edit item"
+              style={{
+                cursor: "pointer",
+                marginLeft: "0.5em",
+                transition: "all 0.2s",
+                fontSize: "1.1em",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSectionNameDoubleClick(e);
+              }}
+            ></i>
           </h5>
         )}
         <div className="btn-group btn-group-sm flex-shrink-0">
