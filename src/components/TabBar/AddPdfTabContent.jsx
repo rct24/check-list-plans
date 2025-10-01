@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import { useId } from "react";
 
+=======
+>>>>>>> 63ee775 (Refactor TabBar component; restructure tab content into separate components and update import paths for improved organization and maintainability.)
 export default function AddPdfTabContent({ onFileChange }) {
   const fileId = useId();
 
