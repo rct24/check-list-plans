@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
-import TabBar from "../components/TabBar";
+import TabBar from "./TabBar/TabBar";
 import CheckListContainer from "../containers/CheckListContainer";
 import PlanSelector from "./PlanSelector";
 import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
