@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { AppContext, useAppContext } from "../../shared/context/AppContext";
+import { AppContext, useAppContext } from "../../context/AppContext";
+
 import {
   SideBarContext,
   useSideBarContext,
-} from "../../shared/context/SideBarContext";
+} from "../../context/SideBarContext";
 import TabNavItem from "./TabNavItem";
 import DrawTabContent from "./DrawTabContent";
 import AddSectionTabContent from "./AddSectionTabContent";
@@ -15,6 +16,10 @@ export default function TabBar() {
   const { sectionInput, handleSectionInput, handleAddSection } =
     useSideBarContext(SideBarContext);
   const [activeTab, setActiveTab] = useState("draw");
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+  };
 
   const tabs = [
     { id: "draw", label: "Draw" },
@@ -56,7 +61,7 @@ export default function TabBar() {
             id={tab.id}
             label={tab.label}
             isActive={activeTab === tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => handleTabChange(tab.id)}
           />
         ))}
       </ul>

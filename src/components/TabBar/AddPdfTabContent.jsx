@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 export default function AddPdfTabContent({ onFileChange }) {
   const fileId = useId();
 
