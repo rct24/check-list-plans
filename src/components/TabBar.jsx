@@ -1,16 +1,18 @@
-import { useContext, useState } from "react";
+import { useState, useId } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
 import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 
 export default function TabBar() {
-  const { isDraw, handleSetIsDraw, clearCanvas } = useAppContext(AppContext);
+  const { isDraw, handleSetIsDraw, clearCanvas, onFileChange } =
+    useAppContext(AppContext);
   const { sectionInput, handleSectionInput, handleAddSection } =
     useSideBarContext(SideBarContext);
   const [activeTab, setActiveTab] = useState("draw");
+  const fileId = useId();
 
   return (
-    <div className="card mb-3">
-      <ul className="nav nav-tabs">
+    <div className="card mb-3 shadow-sm">
+      <ul className="nav nav-tabs nav-fill">
         <li className="nav-item">
           <button
             className={`nav-link ${activeTab === "draw" ? "active" : ""}`}
@@ -18,6 +20,7 @@ export default function TabBar() {
             name="draw-tab"
             onClick={() => setActiveTab("draw")}
             style={{ cursor: "pointer" }}
+            type="button"
           >
             Draw
           </button>
@@ -30,6 +33,7 @@ export default function TabBar() {
             aria-current={activeTab === "add" ? "page" : undefined}
             onClick={() => setActiveTab("add")}
             style={{ cursor: "pointer" }}
+            type="button"
           >
             Add Section
           </button>
@@ -42,17 +46,18 @@ export default function TabBar() {
             aria-current={activeTab === "lorem" ? "page" : undefined}
             onClick={() => setActiveTab("lorem")}
             style={{ cursor: "pointer" }}
+            type="button"
           >
-            Lorem ipsum
+            Add pdf
           </button>
         </li>
       </ul>
 
       {activeTab === "draw" && (
-        <div className="card-body">
+        <div className="card-body d-flex gap-2">
           {isDraw ? (
             <button
-              className="btn btn-danger me-2"
+              className="btn btn-danger"
               type="button"
               id="draw-stop"
               name="draw-stop"
@@ -62,7 +67,7 @@ export default function TabBar() {
             </button>
           ) : (
             <button
-              className="btn btn-success me-2"
+              className="btn btn-success"
               type="button"
               id="draw-start"
               name="draw-start"
@@ -121,16 +126,17 @@ export default function TabBar() {
 
       {activeTab === "lorem" && (
         <div className="card-body">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-            pulvinar risus non risus hendrerit venenatis. Pellentesque sit amet
-            hendrerit risus, sed porttitor quam.
-          </p>
-          <p>
-            Magna nulla id sed nisl sagittis aliquet. Nam pulvinar turpis
-            bibendum dui commodo, id hendrerit velit suscipit. Morbi id aliquet
-            urna. Aliquam interdum.
-          </p>
+          <div className="mb-3">
+            <label htmlFor={fileId} className="form-label">
+              Load from file:
+            </label>
+            <input
+              id={fileId}
+              onChange={onFileChange}
+              type="file"
+              className="form-control"
+            />
+          </div>
         </div>
       )}
     </div>

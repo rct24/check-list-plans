@@ -9,8 +9,14 @@ import {
 // Custom hook for PDF viewer logic
 export default function usePdfViewerLogic() {
   // --- CONTEXT & SHARED STATE ---
-  const { selectedPlan, isDraw, canvasRef, checkListData, handleCheckBox } =
-    useContext(AppContext);
+  const {
+    selectedPlan,
+    isDraw,
+    canvasRef,
+    checkListData,
+    handleCheckBox,
+    file,
+  } = useContext(AppContext);
 
   // --- INTERNAL STATE ---
   const [clicks, setClicks] = useState([]); // Stores annotation clicks for current plan
@@ -21,7 +27,6 @@ export default function usePdfViewerLogic() {
   const containerRef = useRef(null); // Ref for the main viewer container
 
   // --- DERIVED VARIABLES ---
-  const fileName = `${selectedPlan}.pdf`;
   const { items: checkList = [], firstUncheckedIndex: index = -1 } =
     checkListData || {};
 
@@ -181,7 +186,6 @@ export default function usePdfViewerLogic() {
 
   return {
     containerRef,
-    fileName,
     handleCanvasOnClick,
     handleMouseMove,
     handleMouseLeave,

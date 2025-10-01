@@ -4,12 +4,11 @@ import { AppContext } from "../context/AppContext";
 export default function PdfViewer({
   sidebarWidth,
   containerRef,
-  fileName,
   handleCanvasOnClick,
   handleMouseMove,
   handleMouseLeave,
 }) {
-  const { isDraw, canvasRef } = useContext(AppContext);
+  const { isDraw, canvasRef, file } = useContext(AppContext);
   //Render
   return (
     <div
@@ -24,7 +23,7 @@ export default function PdfViewer({
     >
       <div className="position-relative w-100 h-100">
         <iframe
-          src={`${import.meta.env.BASE_URL}${fileName}`}
+          src={`${import.meta.env.BASE_URL}${file}`}
           title="PDF Viewer"
           className="w-100 h-100 border-0 position-absolute top-0 start-0"
           style={{

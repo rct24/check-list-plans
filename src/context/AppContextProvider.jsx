@@ -15,6 +15,8 @@ export function AppContextProvider({ children }) {
   const [selectedPlan, setSelectedPlan] = useState(planList[0]);
   // Drawing State
   const [isDraw, setIsDraw] = useState(false);
+  // File State
+  const [file, setFile] = useState(`${selectedPlan}.pdf`);
 
   const canvasRef = useRef(null);
 
@@ -94,6 +96,20 @@ export function AppContextProvider({ children }) {
     });
   }
 
+  useEffect(() => {
+    setFile(`${selectedPlan}.pdf`);
+  }, [selectedPlan]);
+
+  // File state
+  function onFileChange(event) {
+    const { files } = event.target;
+
+    const nextFile = files?.[0];
+
+    if (nextFile) {
+      setFile(nextFile);
+    }
+  }
   // Memoized checklist data
   const checkListData = useMemo(() => {
     let items = [];
@@ -130,6 +146,8 @@ export function AppContextProvider({ children }) {
     plansData,
     handleSetPlansData,
     handleCheckBox,
+    onFileChange,
+    file,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -8,7 +8,6 @@ export default function PdfViewerContainer({ sidebarWidth }) {
     <PdfViewer
       sidebarWidth={sidebarWidth}
       containerRef={logic.containerRef}
-      fileName={logic.fileName}
       handleCanvasOnClick={logic.handleCanvasOnClick}
       handleMouseMove={logic.handleMouseMove}
       handleMouseLeave={logic.handleMouseLeave}
