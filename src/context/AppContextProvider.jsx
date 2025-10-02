@@ -3,36 +3,24 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { cofrajPana, armarePana, cofrajStalp } from "../constants/constants";
 
 // App Context Provider Component
-export function AppContextProvider({ children }) {
-  const [planList, setPlanList] = useState([
-    "R501_Plan cofraj stalp S1",
-    "R502_Plan armare stalp S1",
-    "R503_Plan cofraj stalp S2",
-    "R504_Plan armare stalp S2",
-  ]);
-
-  // Selected Plan State
-  const [selectedPlan, setSelectedPlan] = useState(planList[0]);
+export function AppContextProvider({
+  children,
+  planList,
+  handleSetPlanList,
+  file,
+  selectedPlan,
+  handleSelectedPlan,
+  onFileChange,
+}) {
   // Drawing State
   const [isDraw, setIsDraw] = useState(false);
-  // File State
-  const [file, setFile] = useState(`${selectedPlan}.pdf`);
+  console.log(selectedPlan);
 
   const canvasRef = useRef(null);
-
-  // Set selected plan
-  function handleSelectedPlan(plan) {
-    setSelectedPlan(plan);
-  }
 
   // Set isDraw
   function handleSetIsDraw(value) {
     setIsDraw(value);
-  }
-
-  // Update plan list
-  function handleSetPlanList(plan) {
-    setPlanList(plan);
   }
 
   // Clear canvas
@@ -96,24 +84,16 @@ export function AppContextProvider({ children }) {
     });
   }
 
-  useEffect(() => {
-    setFile(`${selectedPlan}.pdf`);
-  }, [selectedPlan]);
-
-  // File state
-  function onFileChange(event) {
-    const { files } = event.target;
-
-    const nextFile = files?.[0];
-
-    if (nextFile) {
-      setFile(nextFile);
-    }
-  }
-  // Memoized checklist data
+  // Better solution using useMemo
   const checkListData = useMemo(() => {
     let items = [];
     let firstUncheckedIndex = -1;
+
+    // Guard against undefined or null
+    if (!selectedPlan || !plansData[selectedPlan]) {
+      return { items, firstUncheckedIndex };
+    }
+
     Object.entries(plansData[selectedPlan]).forEach(
       ([sectionName, itemsArray]) => {
         itemsArray.forEach((item, idx) => {

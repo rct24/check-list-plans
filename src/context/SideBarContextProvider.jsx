@@ -4,6 +4,7 @@ import { SideBarContext } from "./SideBarContext";
 
 // SideBar Context Provider Component
 export function SideBarContextProvider({ children }) {
+  debugger;
   const { selectedPlan, plansData, handleSetPlansData } =
     useAppContext(AppContext);
 
@@ -16,6 +17,10 @@ export function SideBarContextProvider({ children }) {
   // Add new section
   function handleAddSection() {
     if (sectionInput.trim() === "") return;
+    if (!selectedPlan || !plansData[selectedPlan]) {
+      console.warn("No plan selected or plan data not found");
+      return;
+    }
 
     if (plansData[selectedPlan][sectionInput]) {
       alert("Section already exists!");
@@ -35,6 +40,8 @@ export function SideBarContextProvider({ children }) {
   }
   // Edit section name
   function handleEditSection(sectionName, newSectionName) {
+    if (!selectedPlan || !plansData[selectedPlan]) return;
+
     handleSetPlansData((prev) => {
       if (prev[selectedPlan][newSectionName]) {
         alert("Section name already exists!");
@@ -58,6 +65,8 @@ export function SideBarContextProvider({ children }) {
   }
   // Delete section
   function handleDeleteSection(sectionName) {
+    if (!selectedPlan || !plansData[selectedPlan]) return;
+
     handleSetPlansData((prev) => {
       const updatedSections = { ...prev[selectedPlan] };
       delete updatedSections[sectionName];
@@ -71,6 +80,8 @@ export function SideBarContextProvider({ children }) {
   //--Item handlers--
   // Add new item to section
   function handleAddItem(sectionName, itemText) {
+    if (!selectedPlan || !plansData[selectedPlan]) return;
+
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
       return {
@@ -88,6 +99,8 @@ export function SideBarContextProvider({ children }) {
 
   // Delete item from section
   function handleDeleteItem(sectionName, index) {
+    if (!selectedPlan || !plansData[selectedPlan]) return;
+
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
       const newList = sectionList.filter((_, idx) => idx !== index);
@@ -103,6 +116,8 @@ export function SideBarContextProvider({ children }) {
 
   // Edit item text
   function handleEditItem(sectionName, index, newTextValue) {
+    if (!selectedPlan || !plansData[selectedPlan]) return;
+
     handleSetPlansData((prev) => {
       const sectionToDoList = prev[selectedPlan][sectionName] || [];
 
@@ -122,6 +137,8 @@ export function SideBarContextProvider({ children }) {
 
   // Toggle item checked state
   function handleToggleItem(sectionName, index) {
+    if (!selectedPlan || !plansData[selectedPlan]) return;
+
     handleSetPlansData((prev) => {
       const sectionList = prev[selectedPlan][sectionName] || [];
       return {
@@ -142,7 +159,10 @@ export function SideBarContextProvider({ children }) {
     });
   }
 
-  const sections = Object.keys(plansData[selectedPlan]);
+  const sections =
+    selectedPlan && plansData[selectedPlan]
+      ? Object.keys(plansData[selectedPlan])
+      : [];
 
   const value = {
     plansData,

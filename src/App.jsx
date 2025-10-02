@@ -3,6 +3,7 @@ import PdfViewerContainer from "./containers/PdfViewerContainer";
 import SidebarContainer from "./containers/SidebarContainer";
 import ResizeHandle from "./components/ResizeHandle";
 import { AppContextProvider } from "./context/AppContextProvider";
+import AddPdfTabContent from "./components/TabBar/AddPdfTabContent";
 
 function App() {
   const INITIAL_SIDEBAR_WIDTH = 350;
@@ -13,7 +14,25 @@ function App() {
   const dragStartWidthRef = useRef(INITIAL_SIDEBAR_WIDTH);
   const resizeHandleRef = useRef(null);
   const currentWidthRef = useRef(INITIAL_SIDEBAR_WIDTH);
+  const [planList, setPlanList] = useState([
+    //"R501_Plan cofraj stalp S1",
+    //"R502_Plan armare stalp S1",
+    // "R503_Plan cofraj stalp S2",
+    // "R504_Plan armare stalp S2",
+  ]);
+  // Selected Plan State
+  const [selectedPlan, setSelectedPlan] = useState(planList[0]);
+  // File State
+  const [file, setFile] = useState("");
+  // Update plan list
+  function handleSetPlanList(plan) {
+    setPlanList(plan);
+  }
 
+  // Set selected plan
+  function handleSelectedPlan(plan) {
+    setSelectedPlan(plan);
+  }
   const handleResizeStart = (e) => {
     dragStartXRef.current = e.clientX;
     dragStartWidthRef.current = sidebarWidth;
@@ -80,8 +99,35 @@ function App() {
     };
   }, [isResizing]);
 
-  return (
-    <AppContextProvider>
+  // File state
+  function onFileChange(event) {
+    const { files } = event.target;
+    const nextFile = files?.[0];
+
+    if (nextFile) {
+      const fileName = nextFile.name.endsWith(".pdf")
+        ? nextFile.name.slice(0, -4)
+        : nextFile.name;
+      setFile(`${fileName}.pdf`);
+      setSelectedPlan(fileName);
+      handleSetPlanList((prev) => {
+        if (!prev.includes(fileName)) {
+          return [...prev, fileName];
+        }
+        return prev;
+      });
+    }
+  }
+
+  return planList.length > 0 ? (
+    <AppContextProvider
+      planList={planList}
+      handleSetPlanList={handleSetPlanList}
+      file={file}
+      selectedPlan={selectedPlan}
+      handleSelectedPlan={handleSelectedPlan}
+      onFileChange={onFileChange}
+    >
       <div className="container-fluid p-0">
         <PdfViewerContainer sidebarWidth={sidebarWidth} />
         <ResizeHandle
@@ -93,6 +139,14 @@ function App() {
         <SidebarContainer width={sidebarWidth} />
       </div>
     </AppContextProvider>
+  ) : (
+    <div className="d-flex justify-content-center align-items-center vh-100">
+      <div className="card shadow" style={{ minWidth: 400, maxWidth: 500 }}>
+        <div className="card-body">
+          <AddPdfTabContent onFileChange={onFileChange} />
+        </div>
+      </div>
+    </div>
   );
 }
 

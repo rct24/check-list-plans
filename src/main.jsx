@@ -6,9 +6,9 @@ import App from "./App.jsx";
 import MobileBlocker from "./components/MobileBlocker";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <MobileBlocker>
-      <App />
-    </MobileBlocker>
-  </StrictMode>
+  // <StrictMode>
+  // </StrictMode>
+  <MobileBlocker>
+    <App />
+  </MobileBlocker>
 );
