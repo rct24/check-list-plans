@@ -114,6 +114,37 @@ export function AppContextProvider({
     return { items, firstUncheckedIndex };
   }, [plansData, selectedPlan]);
 
+  // Add a fileMap state to track file objects by name
+  const [fileMap, setFileMap] = useState({});
+
+  // Add to your existing onFileChange or create a new handler
+  function handleFileChange(event) {
+    const { files } = event.target;
+    const nextFile = files?.[0];
+
+    if (nextFile) {
+      const fileName = nextFile.name.endsWith(".pdf")
+        ? nextFile.name.slice(0, -4)
+        : nextFile.name;
+
+      const fileURL = URL.createObjectURL(nextFile);
+
+      // Update fileMap with new file
+      setFileMap((prev) => ({
+        ...prev,
+        [fileName]: {
+          url: fileURL,
+          name: fileName,
+          size: nextFile.size,
+          type: nextFile.type,
+        },
+      }));
+
+      // Use the original onFileChange for plan list updates
+      onFileChange(event);
+    }
+  }
+
   const value = {
     isDraw,
     planList,
@@ -129,6 +160,7 @@ export function AppContextProvider({
     handleCheckBox,
     onFileChange,
     file,
+    fileMap,
   };
 
   useEffect(() => {
@@ -143,6 +175,17 @@ export function AppContextProvider({
       return updated;
     });
   }, [planList]);
+
+  // Clean up object URLs on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(fileMap).forEach((file) => {
+        if (file.url && file.url.startsWith("blob:")) {
+          URL.revokeObjectURL(file.url);
+        }
+      });
+    };
+  }, []);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

@@ -108,7 +108,16 @@ function App() {
       const fileName = nextFile.name.endsWith(".pdf")
         ? nextFile.name.slice(0, -4)
         : nextFile.name;
-      setFile(`${fileName}.pdf`);
+
+      const fileURL = URL.createObjectURL(nextFile);
+
+      setFile({
+        url: fileURL,
+        name: fileName,
+        size: nextFile.size,
+        type: nextFile.type,
+      });
+
       setSelectedPlan(fileName);
       handleSetPlanList((prev) => {
         if (!prev.includes(fileName)) {
@@ -118,6 +127,16 @@ function App() {
       });
     }
   }
+
+  // Add cleanup for object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      // Clean up any object URLs when component unmounts
+      if (file && file.url && file.url.startsWith("blob:")) {
+        URL.revokeObjectURL(file.url);
+      }
+    };
+  }, []);
 
   return planList.length > 0 ? (
     <AppContextProvider

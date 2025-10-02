@@ -22,9 +22,11 @@ export default function PdfViewer({
       }}
     >
       <div className="position-relative w-100 h-100">
-        <iframe
-          src={`${import.meta.env.BASE_URL}${file}`}
-          title="PDF Viewer"
+        <object
+          data={file?.url || ""} // Use the URL property instead of the file name
+          type="application/pdf"
+          width="100%"
+          height="100%"
           className="w-100 h-100 border-0 position-absolute top-0 start-0"
           style={{
             right: 0,
@@ -32,7 +34,9 @@ export default function PdfViewer({
             zIndex: 1,
             pointerEvents: isDraw ? "none" : "auto",
           }}
-        />
+        >
+          <p>Please upload a PDF file to view content</p>
+        </object>
         <canvas
           ref={canvasRef}
           onMouseDown={handleCanvasOnClick}
