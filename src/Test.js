@@ -17,7 +17,6 @@ console.log(` `);
 
 let index = 0;
 while (index < originalAllItems.length) {
-  debugger;
   const elById = allItems.find((el) => +el.id === index);
   if (elById === -1) {
     continue;

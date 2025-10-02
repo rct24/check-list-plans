@@ -2,6 +2,29 @@ import { AppContext } from "./AppContext";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { cofrajPana, armarePana, cofrajStalp } from "../constants/constants";
 
+function getInitialPlanData(plan) {
+  const defaultSections = [
+    "Elevatie",
+    "Sectiuni",
+    "Piese inglobate",
+    "Note",
+    "Cartus",
+  ];
+  if (plan.toLowerCase().includes("cofraj stalp")) {
+    return JSON.parse(JSON.stringify(cofrajStalp));
+  } else if (plan.toLowerCase().includes("cofraj")) {
+    return JSON.parse(JSON.stringify(cofrajPana));
+  } else if (plan.toLowerCase().includes("armare")) {
+    return JSON.parse(JSON.stringify(armarePana));
+  } else {
+    const sectionObj = {};
+    defaultSections.forEach((section) => {
+      sectionObj[section] = [];
+    });
+    return sectionObj;
+  }
+}
+
 // App Context Provider Component
 export function AppContextProvider({
   children,
@@ -14,7 +37,6 @@ export function AppContextProvider({
 }) {
   // Drawing State
   const [isDraw, setIsDraw] = useState(false);
-  console.log(selectedPlan);
 
   const canvasRef = useRef(null);
 
@@ -36,29 +58,8 @@ export function AppContextProvider({
   // Plans Data State
   const [plansData, setPlansData] = useState(() => {
     const data = {};
-
-    const defaultSections = [
-      "Elevatie",
-      "Sectiuni",
-      "Piese inglobate",
-      "Note",
-      "Cartus",
-    ];
-
-    // Initialize plansData with default sections for each plan
     planList.forEach((plan) => {
-      if (plan.toLowerCase().includes("cofraj stalp")) {
-        data[plan] = JSON.parse(JSON.stringify(cofrajStalp));
-      } else if (plan.toLowerCase().includes("cofraj")) {
-        data[plan] = JSON.parse(JSON.stringify(cofrajPana));
-      } else if (plan.toLowerCase().includes("armare")) {
-        data[plan] = JSON.parse(JSON.stringify(armarePana));
-      } else {
-        data[plan] = {};
-        defaultSections.forEach((section) => {
-          data[plan][section] = [];
-        });
-      }
+      data[plan] = getInitialPlanData(plan);
     });
     return data;
   });
@@ -129,6 +130,19 @@ export function AppContextProvider({
     onFileChange,
     file,
   };
+
+  useEffect(() => {
+    if (planList.length === 0) return;
+    setPlansData((prev) => {
+      const updated = { ...prev };
+      planList.forEach((plan) => {
+        if (!updated[plan]) {
+          updated[plan] = getInitialPlanData(plan);
+        }
+      });
+      return updated;
+    });
+  }, [planList]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
 import { SideBarContext } from "./SideBarContext";
+import { useMemo } from "react";
 
 // SideBar Context Provider Component
 export function SideBarContextProvider({ children }) {
-  debugger;
   const { selectedPlan, plansData, handleSetPlansData } =
     useAppContext(AppContext);
 
@@ -159,10 +159,13 @@ export function SideBarContextProvider({ children }) {
     });
   }
 
-  const sections =
-    selectedPlan && plansData[selectedPlan]
-      ? Object.keys(plansData[selectedPlan])
-      : [];
+  const sections = useMemo(
+    () =>
+      selectedPlan && plansData[selectedPlan]
+        ? Object.keys(plansData[selectedPlan])
+        : [],
+    [selectedPlan, plansData]
+  );
 
   const value = {
     plansData,
