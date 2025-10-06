@@ -2,11 +2,11 @@ export default function ResizeHandle({
   width,
   isResizing,
   onPointerDown,
-  forwardedRef,
+  forwardedRef: ref,
 }) {
   return (
     <div
-      ref={forwardedRef}
+      ref={ref}
       className="position-fixed h-100 d-flex align-items-center"
       style={{
         width: "16px",
@@ -53,3 +53,9 @@ export default function ResizeHandle({
     </div>
   );
 }
+
+/**
+ *
+ * REVIEW
+ * export default React.forwardRef(ResizeHandle);
+ */

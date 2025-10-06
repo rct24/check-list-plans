@@ -6,7 +6,6 @@ import { ItemDeleteButton } from "../utils/ItemDeleteButton";
 export default function ListItem({
   itemObj,
   index,
-  sectionName,
   isRowHover,
   isItemEdit,
   textValue,
@@ -16,6 +15,7 @@ export default function ListItem({
   handleEditKeyDown,
   handleEditSubmit,
   handleTextChange,
+  ...props
 }) {
   const { handleToggleItem, handleDeleteItem } = useSideBarContext();
 
@@ -27,14 +27,14 @@ export default function ListItem({
     >
       <ItemToggleAndMark
         itemObj={itemObj}
-        sectionName={sectionName}
+        sectionName={props.sectionName}
         index={index}
         handleToggleItem={handleToggleItem}
       />
 
       <ItemContent
         itemObj={itemObj}
-        sectionName={sectionName}
+        sectionName={props.sectionName}
         index={index}
         isRowHover={isRowHover}
         isItemEdit={isItemEdit}
@@ -47,7 +47,7 @@ export default function ListItem({
 
       <ItemDeleteButton
         itemObj={itemObj}
-        sectionName={sectionName}
+        sectionName={props.sectionName}
         index={index}
         isRowHover={isRowHover}
         handleDeleteItem={handleDeleteItem}

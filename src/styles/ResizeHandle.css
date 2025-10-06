@@ -1,0 +1,47 @@
+/* ResizeHandle.css: Custom styles only, no Bootstrap classes */
+
+.resize-handle {
+  position: fixed;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  width: 16px;
+  top: 0;
+  z-index: 1030;
+  cursor: ew-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.resize-handle-inner {
+  display: flex;
+  align-items: center;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  width: 32px;
+  transform: translateX(-8px);
+  transition: all 0.5s ease;
+}
+
+.resize-handle-inner.resizing {
+  height: 400px;
+  transition: none;
+}
+
+.resize-handle-inner:not(.resizing) {
+  height: 80px;
+}
+
+.resize-handle-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0 auto;
+}
+
+.resize-handle-dot {
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  opacity: 0.8;
+}

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
-import TabBar from "../components/TabBar";
+import TabBar from "./TabBar/TabBar";
 import CheckListContainer from "../containers/CheckListContainer";
 import PlanSelector from "./PlanSelector";
 import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
@@ -24,27 +24,33 @@ export default function Sidebar({ width }) {
       }}
     >
       <TabBar />
-
       <PlanSelector
         planList={planList}
         selectedPlan={selectedPlan}
         onPlanChange={handleSelectedPlan}
       />
-
-      {sections.map((sectionName) => (
-        <CheckListContainer
-          key={sectionName}
-          sectionName={sectionName}
-          list={plansData[selectedPlan][sectionName]}
-          handleAddItem={(text) => handleAddItem(sectionName, text)}
-        />
-      ))}
+      {selectedPlan ? (
+        sections.map((sectionName) => (
+          <CheckListContainer
+            key={sectionName}
+            sectionName={sectionName}
+            list={plansData[selectedPlan][sectionName]}
+            handleAddItem={(text) => handleAddItem(sectionName, text)}
+          />
+        ))
+      ) : (
+        <div className="p-3 text-muted">
+          Please select a plan to view its checklist.
+        </div>
+      )}
       <br />
       <button
         className="btn btn-secondary"
         onClick={() =>
+          selectedPlan &&
           console.log(JSON.stringify(plansData[selectedPlan], null, 2))
         }
+        disabled={!selectedPlan}
       >
         Print JSON to Console
       </button>

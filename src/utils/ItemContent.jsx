@@ -1,3 +1,4 @@
+// REVIEW: components should not live in utils folder, utils is for utility files (e.g formatters, date calculation, lodash type functions, etc)
 export function ItemContent({
   itemObj,
   sectionName,

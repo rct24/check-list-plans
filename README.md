@@ -1,45 +1,6 @@
 # site link: https://rct24.github.io/check-list-plans/
 
-## Directory Structure
-
-The project is organized as follows:
-
-```
-Directory structure:
-└── rct24-check-list-plans/
-    ├── README.md
-    ├── eslint.config.js
-    ├── index.html
-    ├── package.json
-    ├── vite.config.js
-    └── src/
-        ├── App.jsx
-        ├── main.jsx
-        ├── components/
-        │   ├── CheckList.jsx
-        │   ├── ListItem.jsx
-        │   ├── MobileBlocker.jsx
-        │   ├── PdfViewer.jsx
-        │   ├── ResizeHandle.jsx
-        │   ├── Sidebar.jsx
-        │   └── TabBar.jsx
-        ├── constants/
-        │   └── constants.js
-        ├── containers/
-        │   ├── CheckListContainer.jsx
-        │   ├── ListItemContainer.jsx
-        │   └── SidebarContainer.jsx
-        ├── context/
-        │   ├── AppContext.jsx
-        │   ├── AppContextProvider.jsx
-        │   ├── SideBarContext.jsx
-        │   └── SideBarContextProvider.jsx
-        └── styles/
-            └── Sidebar.css
-
-```
-
-# Check List Plans
+## Check List Plans
 
 A web application designed for desktop use that helps engineers manage checklists for engineering plans. The app allows users to select a plan, view its associated checklist, and mark items as complete. It also provides a unique drawing feature where users can add visual checkmarks and text directly onto the PDF of the plan.
 

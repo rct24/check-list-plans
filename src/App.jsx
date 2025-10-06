@@ -4,8 +4,9 @@ import SidebarContainer from "./containers/SidebarContainer";
 import ResizeHandle from "./components/ResizeHandle";
 import { AppContextProvider } from "./context/AppContextProvider";
 
+const INITIAL_SIDEBAR_WIDTH = 350;
 function App() {
-  const INITIAL_SIDEBAR_WIDTH = 350;
+  // REVIEW: this should live in a separat const file outside of any component to avoid recreation every time component is created
 
   const [sidebarWidth, setSidebarWidth] = useState(INITIAL_SIDEBAR_WIDTH);
   const [isResizing, setIsResizing] = useState(false);
@@ -97,3 +98,31 @@ function App() {
 }
 
 export default App;
+
+// review: maybe it would look better like this:
+/**
+ *
+ *
+ function App() {
+  const {
+    sidebarWidth,
+    isResizing,
+    resizeHandleRef,
+    handleResizeStart
+  } = useResizable();
+
+  return (
+    <AppContextProvider>
+      <div className="container-fluid p-0 d-flex">
+        <PdfViewerContainer />
+        <ResizeHandle
+          forwardedRef={resizeHandleRef}
+          isResizing={isResizing}
+          onPointerDown={handleResizeStart}
+        />
+        <SidebarContainer width={sidebarWidth} />
+      </div>
+    </AppContextProvider>
+  );
+}
+ */
