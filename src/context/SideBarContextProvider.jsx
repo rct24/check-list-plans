@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { AppContext, useAppContext } from "../context/AppContext";
 import { SideBarContext } from "./SideBarContext";
 
@@ -121,26 +121,29 @@ export function SideBarContextProvider({ children }) {
   }
 
   // Toggle item checked state
-  function handleToggleItem(sectionName, index) {
-    handleSetPlansData((prev) => {
-      const sectionList = prev[selectedPlan][sectionName] || [];
-      return {
-        ...prev,
-        [selectedPlan]: {
-          ...prev[selectedPlan],
-          [sectionName]: sectionList.map((item, idx) =>
-            idx === index
-              ? {
-                  ...item,
-                  checked: !item.checked,
-                  mark: !item.checked ? "check" : "",
-                }
-              : item
-          ),
-        },
-      };
-    });
-  }
+  const handleToggleItem = useCallback(
+    (sectionName, index) => {
+      handleSetPlansData((prev) => {
+        const sectionList = prev[selectedPlan][sectionName] || [];
+        return {
+          ...prev,
+          [selectedPlan]: {
+            ...prev[selectedPlan],
+            [sectionName]: sectionList.map((item, idx) =>
+              idx === index
+                ? {
+                    ...item,
+                    checked: !item.checked,
+                    mark: !item.checked ? "check" : "",
+                  }
+                : item
+            ),
+          },
+        };
+      });
+    },
+    [plansData, selectedPlan]
+  );
 
   const sections =
     plansData && selectedPlan ? Object.keys(plansData[selectedPlan]) : null;

@@ -1,9 +1,9 @@
-export default function ResizeHandle({
-  width,
-  isResizing,
-  onPointerDown,
-  forwardedRef: ref,
-}) {
+import React from "react";
+
+const ResizeHandle = React.forwardRef(function ResizeHandle(
+  { width, isResizing, onPointerDown },
+  ref
+) {
   return (
     <div
       ref={ref}
@@ -52,10 +52,6 @@ export default function ResizeHandle({
       </div>
     </div>
   );
-}
+});
 
-/**
- *
- * REVIEW
- * export default React.forwardRef(ResizeHandle);
- */
+export default ResizeHandle;

@@ -1,9 +1,10 @@
-import { useSideBarContext } from "../context/SideBarContext";
-import { ItemToggleAndMark } from "../utils/ItemToggleAndMark";
-import { ItemContent } from "../utils/ItemContent";
-import { ItemDeleteButton } from "../utils/ItemDeleteButton";
+import React from "react";
+import { useSideBarContext } from "../../context/SideBarContext";
+import { ItemToggleAndMark } from "./ItemToggleAndMark";
+import { ItemContent } from "./ItemContent";
+import { ItemDeleteButton } from "./ItemDeleteButton";
 
-export default function ListItem({
+function ListItem({
   itemObj,
   index,
   isRowHover,
@@ -55,3 +56,6 @@ export default function ListItem({
     </li>
   );
 }
+
+const MemoListItem = React.memo(ListItem);
+export default MemoListItem;

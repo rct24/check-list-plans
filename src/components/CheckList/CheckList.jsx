@@ -1,4 +1,4 @@
-import ListItemContainer from "../../containers/ListItemContainer";
+import MemoListItemContainer from "../../containers/ListItemContainer";
 import {
   SideBarContext,
   useSideBarContext,
@@ -24,8 +24,8 @@ export default function CheckList({ list, sectionName, ...props }) {
 
       <ul className="list-group list-group-flush">
         {list.map((itemObj, index) => (
-          <ListItemContainer
-            key={index}
+          <MemoListItemContainer
+            key={itemObj.id ?? index}
             itemObj={itemObj}
             index={index}
             sectionName={sectionName}

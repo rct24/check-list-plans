@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import ListItem from "../components/ListItem";
+import React, { useState, useEffect } from "react";
+import MemoListItem from "../components/ListItem/ListItem";
 import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 
-export default function ListItemContainer({ itemObj, index, ...props }) {
+function ListItemContainer({ itemObj, index, ...props }) {
   const [isRowHover, setIsRowHover] = useState(false);
   const [isItemEdit, setIsItemEdit] = useState(false);
   const [textValue, setTextValue] = useState(itemObj.text);
@@ -45,9 +45,11 @@ export default function ListItemContainer({ itemObj, index, ...props }) {
   }
 
   return (
-    <ListItem
+    <MemoListItem
+      {...props}
       itemObj={itemObj}
       index={index}
+      sectionName={props.sectionName}
       isRowHover={isRowHover}
       isItemEdit={isItemEdit}
       textValue={textValue}
@@ -57,7 +59,9 @@ export default function ListItemContainer({ itemObj, index, ...props }) {
       handleEditKeyDown={handleEditKeyDown}
       handleEditSubmit={handleEditSubmit}
       handleTextChange={handleTextChange}
-      {...props}
     />
   );
 }
+
+const MemoListItemContainer = React.memo(ListItemContainer);
+export default MemoListItemContainer;
