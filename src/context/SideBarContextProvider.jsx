@@ -14,111 +14,121 @@ export function SideBarContextProvider({ children }) {
     setSectionInput(value);
   }
   // Add new section
-  function handleAddSection() {
+  const handleAddSection = useCallback(() => {
     if (sectionInput.trim() === "") return;
-
     if (plansData[selectedPlan][sectionInput]) {
       alert("Section already exists!");
       return;
     }
+    handleSetPlansData((prev) => ({
+      ...prev,
+      [selectedPlan]: {
+        ...prev[selectedPlan],
+        [sectionInput]: [],
+      },
+    }));
+    setSectionInput("");
+  }, [sectionInput, plansData, selectedPlan, handleSetPlansData]);
 
-    handleSetPlansData((prev) => {
-      return {
-        ...prev,
-        [selectedPlan]: {
-          ...prev[selectedPlan],
-          [sectionInput]: [],
-        },
-      };
-    });
-    handleSectionInput("");
-  }
   // Edit section name
-  function handleEditSection(sectionName, newSectionName) {
-    handleSetPlansData((prev) => {
-      if (prev[selectedPlan][newSectionName]) {
-        alert("Section name already exists!");
-        return prev;
-      }
-      const sectionToDoList = prev[selectedPlan][sectionName] || [];
-      const updatedSections = {};
-      const entries = Object.entries(prev[selectedPlan]);
-      for (let [key, value] of entries) {
-        if (key === sectionName) {
-          updatedSections[newSectionName] = sectionToDoList;
-        } else {
-          updatedSections[key] = value;
+  const handleEditSection = useCallback(
+    (sectionName, newSectionName) => {
+      handleSetPlansData((prev) => {
+        if (prev[selectedPlan][newSectionName]) {
+          alert("Section name already exists!");
+          return prev;
         }
-      }
-      return {
-        ...prev,
-        [selectedPlan]: updatedSections,
-      };
-    });
-  }
+        const sectionToDoList = prev[selectedPlan][sectionName] || [];
+        const updatedSections = {};
+        Object.entries(prev[selectedPlan]).forEach(([key, value]) => {
+          updatedSections[key === sectionName ? newSectionName : key] = value;
+        });
+        return {
+          ...prev,
+          [selectedPlan]: updatedSections,
+        };
+      });
+    },
+    [plansData, selectedPlan, handleSetPlansData]
+  );
+
   // Delete section
-  function handleDeleteSection(sectionName) {
-    handleSetPlansData((prev) => {
-      const updatedSections = { ...prev[selectedPlan] };
-      delete updatedSections[sectionName];
-      return {
-        ...prev,
-        [selectedPlan]: updatedSections,
-      };
-    });
-  }
+  const handleDeleteSection = useCallback(
+    (sectionName) => {
+      handleSetPlansData((prev) => {
+        const updatedSections = { ...prev[selectedPlan] };
+        delete updatedSections[sectionName];
+        return {
+          ...prev,
+          [selectedPlan]: updatedSections,
+        };
+      });
+    },
+    [selectedPlan, handleSetPlansData]
+  );
 
   //--Item handlers--
   // Add new item to section
-  function handleAddItem(sectionName, itemText) {
-    handleSetPlansData((prev) => {
-      const sectionList = prev[selectedPlan][sectionName] || [];
-      return {
-        ...prev,
-        [selectedPlan]: {
-          ...prev[selectedPlan],
-          [sectionName]: [
-            ...sectionList,
-            { text: itemText, checked: false, mark: undefined },
-          ],
-        },
-      };
-    });
-  }
+  const handleAddItem = useCallback(
+    (sectionName, itemText) => {
+      handleSetPlansData((prev) => {
+        const sectionList = prev[selectedPlan][sectionName] || [];
+        // Generate a unique id for the new item
+        const newId = Date.now() + Math.random();
+        return {
+          ...prev,
+          [selectedPlan]: {
+            ...prev[selectedPlan],
+            [sectionName]: [
+              ...sectionList,
+              { id: newId, text: itemText, checked: false, mark: undefined },
+            ],
+          },
+        };
+      });
+    },
+    [plansData, selectedPlan, handleSetPlansData]
+  );
 
   // Delete item from section
-  function handleDeleteItem(sectionName, index) {
-    handleSetPlansData((prev) => {
-      const sectionList = prev[selectedPlan][sectionName] || [];
-      const newList = sectionList.filter((_, idx) => idx !== index);
-      return {
-        ...prev,
-        [selectedPlan]: {
-          ...prev[selectedPlan],
-          [sectionName]: newList,
-        },
-      };
-    });
-  }
+  const handleDeleteItem = useCallback(
+    (sectionName, index) => {
+      handleSetPlansData((prev) => {
+        const sectionList = prev[selectedPlan][sectionName] || [];
+        const newList = sectionList.filter((_, idx) => idx !== index);
+        return {
+          ...prev,
+          [selectedPlan]: {
+            ...prev[selectedPlan],
+            [sectionName]: newList,
+          },
+        };
+      });
+    },
+    [selectedPlan, handleSetPlansData]
+  );
 
   // Edit item text
-  function handleEditItem(sectionName, index, newTextValue) {
-    handleSetPlansData((prev) => {
-      const sectionToDoList = prev[selectedPlan][sectionName] || [];
+  const handleEditItem = useCallback(
+    (sectionName, index, newTextValue) => {
+      handleSetPlansData((prev) => {
+        const sectionToDoList = prev[selectedPlan][sectionName] || [];
 
-      const newList = sectionToDoList.map((item, i) =>
-        i === index ? { ...item, text: newTextValue } : item
-      );
+        const newList = sectionToDoList.map((item, i) =>
+          i === index ? { ...item, text: newTextValue } : item
+        );
 
-      return {
-        ...prev,
-        [selectedPlan]: {
-          ...prev[selectedPlan],
-          [sectionName]: newList,
-        },
-      };
-    });
-  }
+        return {
+          ...prev,
+          [selectedPlan]: {
+            ...prev[selectedPlan],
+            [sectionName]: newList,
+          },
+        };
+      });
+    },
+    [selectedPlan, handleSetPlansData]
+  );
 
   // Toggle item checked state
   const handleToggleItem = useCallback(
