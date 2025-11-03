@@ -1,4 +1,3 @@
-// src/components/StorageManager.jsx
 import { useEffect, useState } from "react";
 import { checkStorage, clearAllStoredData } from "../utils/storageUtils";
 import { useAppContext } from "../context/AppContext";

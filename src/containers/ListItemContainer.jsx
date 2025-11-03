@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import MemoListItem from "../components/ListItem/ListItem";
 import { SideBarContext, useSideBarContext } from "../context/SideBarContext";
 
