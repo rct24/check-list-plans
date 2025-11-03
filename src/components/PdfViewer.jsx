@@ -10,7 +10,7 @@ export default function PdfViewer({
   handleMouseLeave,
 }) {
   const { isDraw, canvasRef } = useContext(AppContext);
-  //Render
+
   return (
     <div
       ref={containerRef}
