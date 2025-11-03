@@ -13,23 +13,19 @@ export default function useSectionLogicCRUD({
   const [tempSectionName, setTempSectionName] = useState(sectionName);
   const sectionNameInputRef = useRef(null);
 
-  // --- Effects ---
   useEffect(() => {
     setTempSectionName(sectionName);
   }, [sectionName]);
 
-  // Focus on the input when editing section name starts
   useEffect(() => {
     if (isEditSectionName && sectionNameInputRef.current) {
       sectionNameInputRef.current.focus();
     }
   }, [isEditSectionName]);
 
-  // --- Handlers ---
   const handleMouseEnter = () => setIsHover(true);
   const handleMouseLeave = () => setIsHover(false);
 
-  // SECTION NAME EDITING
   const handleSectionNameChange = (e) => setTempSectionName(e.target.value);
 
   const handleSectionNameSubmit = () => {
@@ -56,7 +52,6 @@ export default function useSectionLogicCRUD({
     setIsEditSectionName(true);
   };
 
-  // DELETE
   const handleDeleteConfirm = () => {
     setIsDeleteSectionConfirmed(true);
   };
